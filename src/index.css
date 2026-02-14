@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+}
+
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* fallback */
+}
