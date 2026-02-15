@@ -14,7 +14,7 @@ export default function CharacterPreview() {
       <img
         src={BODY_IDLE.legs[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
-        alt="legs bg"
+        alt="legs background"
       />
       <img
         src={BODY_IDLE.legs[0].value.outline}
@@ -26,7 +26,7 @@ export default function CharacterPreview() {
       <img
         src={BODY_IDLE.bottom[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
-        alt="bottom bg"
+        alt="bottom background"
       />
       <img
         src={BODY_IDLE.bottom[0].value.outline}
@@ -38,7 +38,7 @@ export default function CharacterPreview() {
       <img
         src={BODY_IDLE.top[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
-        alt="top bg"
+        alt="top background"
       />
       <img
         src={BODY_IDLE.top[0].value.outline}
@@ -50,7 +50,7 @@ export default function CharacterPreview() {
       <img
         src={BODY_IDLE.arms[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
-        alt="arms bg"
+        alt="arms background"
       />
       <img
         src={BODY_IDLE.arms[0].value.outline}
