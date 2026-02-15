@@ -1,40 +1,39 @@
 import { getLayeredAssetsFor } from "./pairLayeredAssets";
-import type { LayeredAsset } from "@/types/character";
+import { getSingleLayerAssetsFor } from "./singleLayerAssets";
+import type { CharacterOption, LayeredAsset } from "@/types/character";
 
 // ---------- HEAD ----------
-export const HEAD: LayeredAsset[] = getLayeredAssetsFor("head");
+export const HEAD: CharacterOption<LayeredAsset>[] =
+  getLayeredAssetsFor("head");
 
 // ---------- HAIR ----------
-export const HAIR: LayeredAsset[] = getLayeredAssetsFor("hair");
+export const HAIR: CharacterOption<LayeredAsset>[] =
+  getLayeredAssetsFor("hair");
 
 // ---------- EYES ----------
-const eyes = import.meta.glob("/src/assets/character/eyes/*.png", {
-  eager: true,
-  import: "default",
-});
-export const EYES = Object.values(eyes) as string[];
+export const EYES: CharacterOption<string>[] = getSingleLayerAssetsFor("eyes");
 
 // ---------- MOUTH ----------
-const mouth = import.meta.glob("/src/assets/character/mouth/*.png", {
-  eager: true,
-  import: "default",
-});
-export const MOUTH = Object.values(mouth) as string[];
+export const MOUTH: CharacterOption<string>[] =
+  getSingleLayerAssetsFor("mouth");
 
 // ---------- BODY ----------
+const BODY: CharacterOption<LayeredAsset>[] = getLayeredAssetsFor("body");
 
-const BODY = getLayeredAssetsFor("body");
-
-// Helper: grab frames for a specific animation + part
+// Partition the flat BODY list into animation/part buckets for rendering.
 const bodyFrames = (
   anim: "idle" | "run",
   part: "arms" | "legs" | "top" | "bottom",
 ) =>
   BODY.filter(
     (a) =>
-      a.bg.includes(`body_${anim}_${part}_`) &&
-      a.outline.includes(`body_${anim}_${part}_`),
-  ).sort((a, b) => a.bg.localeCompare(b.bg, undefined, { numeric: true }));
+      a.value.bg.includes(`body_${anim}_${part}_`) &&
+      a.value.outline.includes(`body_${anim}_${part}_`),
+  )
+    // Numeric sort keeps frame 2 before frame 10.
+    .sort((a, b) =>
+      a.value.bg.localeCompare(b.value.bg, undefined, { numeric: true }),
+    );
 
 export const BODY_IDLE = {
   arms: bodyFrames("idle", "arms"),

@@ -1,20 +1,20 @@
-import type { LayeredAsset } from "@/types/character";
-import { reportAssetDiagnostics } from "./assetDiagnostics";
+import type { CharacterOption, LayeredAsset } from "@/types/character";
+import { reportLayeredAssetDiagnostics } from "./assetDiagnostics";
 
 // Load outline + bg images separately so we can:
 // - enforce filename conventions
 // - detect duplicates / missing pairs
-// - pair layers into LayeredAsset[] (UI never deals with partial layers)
+// - pairs raw filesystem URLs into LayeredAsset[]
 
 // prettier-ignore
 // Eager-import at module init time so these resolve to static URLs
 // (avoids async dynamic imports; images may still load over network)
-const OUTLINE_FILES = import.meta.glob("/src/assets/character/**/*_outline*.png",{ 
+const OUTLINE_FILES = import.meta.glob("/src/assets/character/**/*_outline.png",{ 
     eager: true, 
     import: "default" 
   }) as Record<string, string>;
 
-const BG_FILES = import.meta.glob("/src/assets/character/**/*_bg*.png", {
+const BG_FILES = import.meta.glob("/src/assets/character/**/*_bg.png", {
   eager: true,
   import: "default",
 }) as Record<string, string>;
@@ -48,7 +48,7 @@ export const keyFromPath = (path: string) => {
   // - variant: can contain underscores (idle_arms, run_bottom, etc)
   // - frame: digits
   const match = file.match(
-    /^(?<category>[a-z0-9]+)_(?<variant>[a-z0-9_]+)_(?<frame>\d+)_(?:outline|bg).*\.png$/i,
+    /^(?<category>[a-z0-9]+)_(?<variant>[a-z0-9_]+)_(?<frame>\d+)_(?:outline|bg)\.png$/i,
   );
   if (!match?.groups) return null;
 
@@ -127,18 +127,21 @@ export const getLayeredAssetsFor = (folder: string) => {
     folder,
   );
 
-  reportAssetDiagnostics(diagnostics);
+  reportLayeredAssetDiagnostics(diagnostics);
 
   return paired;
 };
 
 // Pure pairing logic (no logging):
-// returns paired LayeredAssets + diagnostics for reporting/testing.
+// returns paired CharacterOptions (stable id + {outline,bg}) + diagnostics for reporting/testing.
 export const pairLayeredAssets = (
   outlineFiles: Record<string, string>,
   bgFiles: Record<string, string>,
   folder: string,
-): { paired: LayeredAsset[]; diagnostics: PairingDiagnostics } => {
+): {
+  paired: CharacterOption<LayeredAsset>[];
+  diagnostics: PairingDiagnostics;
+} => {
   const folderNeedle = `/src/assets/character/${folder}/`;
   const diag = createPairingDiagnostics();
 
@@ -154,10 +157,14 @@ export const pairLayeredAssets = (
     // (prevents crashes if a file is missing its pair)
     .filter((k) => bgsByKey.has(k))
     .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    // Map to LayeredAsset objects with { outline: string, bg: string }
+    // Map to CharacterOption<LayeredAsset> objects: { id, value: { outline, bg } }
     .map((k) => ({
-      outline: outlinesByKey.get(k)!.url,
-      bg: bgsByKey.get(k)!.url,
+      // Keep the pairing key as a stable id so saved configs don’t break if array order changes.
+      id: k,
+      value: {
+        outline: outlinesByKey.get(k)!.url,
+        bg: bgsByKey.get(k)!.url,
+      },
     }));
 
   return { paired, diagnostics: diag };

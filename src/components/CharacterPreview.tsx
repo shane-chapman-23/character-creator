@@ -9,80 +9,82 @@ export default function CharacterPreview() {
 
   return (
     <div className="relative w-[256px] h-[256px]">
+      {/* Draw order is intentional: back-to-front layering for a single composite sprite. */}
       {/* LEGS */}
       <img
-        src={BODY_IDLE.legs[0].bg}
+        src={BODY_IDLE.legs[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="legs bg"
       />
       <img
-        src={BODY_IDLE.legs[0].outline}
+        src={BODY_IDLE.legs[0].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="legs outline"
       />
 
       {/* BOTTOM */}
       <img
-        src={BODY_IDLE.bottom[0].bg}
+        src={BODY_IDLE.bottom[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="bottom bg"
       />
       <img
-        src={BODY_IDLE.bottom[0].outline}
+        src={BODY_IDLE.bottom[0].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="bottom outline"
       />
 
       {/* TOP */}
       <img
-        src={BODY_IDLE.top[0].bg}
+        src={BODY_IDLE.top[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="top bg"
       />
       <img
-        src={BODY_IDLE.top[0].outline}
+        src={BODY_IDLE.top[0].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="top outline"
       />
 
       {/* ARMS */}
       <img
-        src={BODY_IDLE.arms[0].bg}
+        src={BODY_IDLE.arms[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="arms bg"
       />
       <img
-        src={BODY_IDLE.arms[0].outline}
+        src={BODY_IDLE.arms[0].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="arms outline"
       />
+      {/* Head and face details sit above torso layers but below hair. */}
       <img
-        src={HEAD[0].bg}
+        src={HEAD[0].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="head background"
       />
       <img
-        src={HEAD[0].outline}
+        src={HEAD[0].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="head outline"
       />
       <img
-        src={EYES[selectedEyes]}
+        src={EYES[selectedEyes].value}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="eyes"
       />
       <img
-        src={MOUTH[selectedMouth]}
+        src={MOUTH[selectedMouth].value}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="mouth"
       />
       <img
-        src={HAIR[selectedHair].bg}
+        src={HAIR[selectedHair].value.bg}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="hair background"
       />
       <img
-        src={HAIR[selectedHair].outline}
+        src={HAIR[selectedHair].value.outline}
         className="absolute inset-0 w-full h-full pixel-art"
         alt="hair outline"
       />

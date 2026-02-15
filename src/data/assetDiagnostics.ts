@@ -1,15 +1,22 @@
 import type { PairingDiagnostics } from "./pairLayeredAssets";
+import type { SingleLayerDiagnostics } from "./singleLayerAssets";
 
-// Dev-only diagnostics reporter for asset pairing.
+export type SingleLayerDuplicate = {
+  id: string;
+  existingPath: string;
+  newPath: string;
+};
+
+// Dev-only diagnostics reporter for asset pairing and duplicates.
 //
 // This module is intentionally separated from the pairing logic so that:
-// - pairLayeredAssets remains a pure transform (no console side effects)
+// - pairLayeredAssets and pairSingleAssets remain a pure transform (no console side effects)
 // - diagnostics can be inspected in tests without triggering logs
 // - logging is restricted to development environments only
 //
-// In production builds, this function is a no-op.
+// In production builds, these functions are a no-op.
 
-export const reportAssetDiagnostics = (d: PairingDiagnostics) => {
+export const reportLayeredAssetDiagnostics = (d: PairingDiagnostics) => {
   if (!import.meta.env.DEV) return;
 
   if (d.unrecognized.length) {
@@ -40,6 +47,25 @@ export const reportAssetDiagnostics = (d: PairingDiagnostics) => {
   if (d.missingOutline.length) {
     console.warn(
       `[character assets] Missing outline layer for: ${d.missingOutline.join(", ")}`,
+    );
+  }
+};
+
+export const reportSingleLayerAssetDiagnostics = (
+  folder: string,
+  d: SingleLayerDiagnostics,
+) => {
+  if (!import.meta.env.DEV) return;
+
+  if (d.duplicates.length) {
+    console.warn(
+      `[character assets] Duplicate ${folder} ids:\n` +
+        d.duplicates
+          .map(
+            (x) =>
+              `- "${x.id}"\n  Existing: ${x.existingPath}\n  New: ${x.newPath}`,
+          )
+          .join("\n"),
     );
   }
 };
