@@ -40,9 +40,14 @@ describe("keyFromPath", () => {
     expect(keyFromPath(path)).toBeNull();
   });
 
-  it("accepts extra suffix after layer token (outline|bg)", () => {
+  it("rejects extra suffix after layer token (outline|bg)", () => {
     const path = "/src/assets/character/hair/hair_idle_1_outline_v2.png";
-    expect(keyFromPath(path)).toBe("hair_idle_1");
+    expect(keyFromPath(path)).toBeNull();
+  });
+
+  it("rejects extra suffix after bg token", () => {
+    const path = "/src/assets/character/hair/hair_idle_1_bg_copy.png";
+    expect(keyFromPath(path)).toBeNull();
   });
 });
 
@@ -69,8 +74,8 @@ describe("pairLayeredAssets", () => {
     );
 
     expect(paired).toEqual([
-      { outline: "o1", bg: "b1" },
-      { outline: "o2", bg: "b2" },
+      { id: "hair_idle_1", value: { outline: "o1", bg: "b1" } },
+      { id: "hair_idle_2", value: { outline: "o2", bg: "b2" } },
     ]);
 
     expect(diagnostics.missingBg).toEqual(["hair_idle_3"]);
@@ -93,8 +98,8 @@ describe("pairLayeredAssets", () => {
     const { paired } = pairLayeredAssets(outlineFiles, bgFiles, "hair");
 
     expect(paired).toEqual([
-      { outline: "o2", bg: "b2" },
-      { outline: "o10", bg: "b10" },
+      { id: "hair_idle_2", value: { outline: "o2", bg: "b2" } },
+      { id: "hair_idle_10", value: { outline: "o10", bg: "b10" } },
     ]);
   });
 
@@ -115,7 +120,9 @@ describe("pairLayeredAssets", () => {
       "hair",
     );
 
-    expect(paired).toEqual([{ outline: "hair-o1", bg: "hair-b1" }]);
+    expect(paired).toEqual([
+      { id: "hair_idle_1", value: { outline: "hair-o1", bg: "hair-b1" } },
+    ]);
     expect(diagnostics.missingBg).toEqual([]);
     expect(diagnostics.missingOutline).toEqual([]);
   });
@@ -136,7 +143,9 @@ describe("pairLayeredAssets", () => {
       "hair",
     );
 
-    expect(paired).toEqual([{ outline: "o1", bg: "b1" }]);
+    expect(paired).toEqual([
+      { id: "hair_idle_1", value: { outline: "o1", bg: "b1" } },
+    ]);
     expect(diagnostics.unrecognized).toEqual([
       "/src/assets/character/hair/hair_idle_outline.png",
     ]);
@@ -144,8 +153,8 @@ describe("pairLayeredAssets", () => {
 
   it("records duplicates (last write wins)", () => {
     const outlineFiles = {
-      "/src/assets/character/hair/hair_idle_1_outline.png": "o1-first",
-      "/src/assets/character/hair/hair_idle_1_outline_DUP.png": "o1-second", // same key
+      "/src/assets/character/hair/a/hair_idle_1_outline.png": "o1-first",
+      "/src/assets/character/hair/b/hair_idle_1_outline.png": "o1-second", // same key, valid filename
     };
 
     const bgFiles = {
@@ -159,13 +168,15 @@ describe("pairLayeredAssets", () => {
     );
 
     // last write wins: outline should be o1-second
-    expect(paired).toEqual([{ outline: "o1-second", bg: "b1" }]);
+    expect(paired).toEqual([
+      { id: "hair_idle_1", value: { outline: "o1-second", bg: "b1" } },
+    ]);
 
     expect(diagnostics.duplicates).toEqual([
       {
         key: "hair_idle_1",
-        existingPath: "/src/assets/character/hair/hair_idle_1_outline.png",
-        newPath: "/src/assets/character/hair/hair_idle_1_outline_DUP.png",
+        existingPath: "/src/assets/character/hair/a/hair_idle_1_outline.png",
+        newPath: "/src/assets/character/hair/b/hair_idle_1_outline.png",
       },
     ]);
   });
@@ -270,22 +281,23 @@ describe("buildEntriesByKey", () => {
 
   it("records duplicates when two paths generate the same key", () => {
     const files = {
-      "/src/assets/character/hair/hair_0_0_outline.png": "first",
-      "/src/assets/character/hair/hair_0_0_outline_DUP.png": "second", // same key
-    };
+      "/src/assets/character/hair/a/hair_idle_1_outline.png": "first",
+      "/src/assets/character/hair/b/hair_idle_1_outline.png": "second",
+    } as Record<string, string>;
 
     const diag = createPairingDiagnostics();
 
     const folderNeedle = "/src/assets/character/hair/";
     const map = buildEntriesByKey(files, folderNeedle, diag);
 
-    expect(map.get("hair_0_0")?.url).toBe("second"); // last wins
+    // key is hair_idle_1 (not hair_0_0)
+    expect(map.get("hair_idle_1")?.url).toBe("second"); // last wins
 
     expect(diag.duplicates).toEqual([
       {
-        key: "hair_0_0",
-        existingPath: "/src/assets/character/hair/hair_0_0_outline.png",
-        newPath: "/src/assets/character/hair/hair_0_0_outline_DUP.png",
+        key: "hair_idle_1",
+        existingPath: "/src/assets/character/hair/a/hair_idle_1_outline.png",
+        newPath: "/src/assets/character/hair/b/hair_idle_1_outline.png",
       },
     ]);
   });
@@ -339,11 +351,20 @@ describe("pairLayeredAssets (realistic body/idle set)", () => {
     );
 
     expect(paired).toEqual([
-      { outline: "o-bot-0", bg: "b-bot-0" },
-      { outline: "o-bot-1", bg: "b-bot-1" },
-      { outline: "o-legs-0", bg: "b-legs-0" },
-      { outline: "o-top-0", bg: "b-top-0" },
-      { outline: "o-top-1", bg: "b-top-1" },
+      {
+        id: "body_idle_bottom_0",
+        value: { outline: "o-bot-0", bg: "b-bot-0" },
+      },
+      {
+        id: "body_idle_bottom_1",
+        value: { outline: "o-bot-1", bg: "b-bot-1" },
+      },
+      {
+        id: "body_idle_legs_0",
+        value: { outline: "o-legs-0", bg: "b-legs-0" },
+      },
+      { id: "body_idle_top_0", value: { outline: "o-top-0", bg: "b-top-0" } },
+      { id: "body_idle_top_1", value: { outline: "o-top-1", bg: "b-top-1" } },
     ]);
 
     expect(diagnostics.missingBg).toEqual(["body_idle_legs_1"]);
