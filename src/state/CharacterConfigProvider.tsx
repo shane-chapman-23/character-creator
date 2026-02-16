@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import type {
   CharacterConfig,
   CharacterPart,
@@ -56,45 +62,30 @@ export function CharacterConfigProvider({
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
   }, [config]);
 
-  const setPartId = (part: CharacterPart, id: OptionId) => {
+  const setPartId = useCallback((part: CharacterPart, id: OptionId) => {
     setConfig((prev) => ({
       ...prev,
-      parts: {
-        ...prev.parts,
-        [part]: id,
-      },
+      parts: { ...prev.parts, [part]: id },
     }));
-  };
+  }, []);
 
-  const nextPart = (part: CharacterPart) => {
+  const nextPart = useCallback((part: CharacterPart) => {
     const ids = AVAILABLE_PART_IDS[part];
     setConfig((prev) => {
       const nextId = cycleId(ids, prev.parts[part], 1);
-      return {
-        ...prev,
-        parts: {
-          ...prev.parts,
-          [part]: nextId,
-        },
-      };
+      return { ...prev, parts: { ...prev.parts, [part]: nextId } };
     });
-  };
+  }, []);
 
-  const prevPart = (part: CharacterPart) => {
+  const prevPart = useCallback((part: CharacterPart) => {
     const ids = AVAILABLE_PART_IDS[part];
     setConfig((prev) => {
       const nextId = cycleId(ids, prev.parts[part], -1);
-      return {
-        ...prev,
-        parts: {
-          ...prev.parts,
-          [part]: nextId,
-        },
-      };
+      return { ...prev, parts: { ...prev.parts, [part]: nextId } };
     });
-  };
+  }, []);
 
-  const randomizeParts = () => {
+  const randomizeParts = useCallback(() => {
     setConfig((prev) => ({
       ...prev,
       parts: {
@@ -104,13 +95,13 @@ export function CharacterConfigProvider({
         mouth: randomFrom(AVAILABLE_PART_IDS.mouth) || prev.parts.mouth,
       },
     }));
-  };
+  }, []);
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setConfig(
       clampConfigToAvailableIds(DEFAULT_CHARACTER_CONFIG, AVAILABLE_PART_IDS),
     );
-  };
+  }, []);
 
   // Memoized context value prevents needless rerenders in consumers.
   const value = useMemo<CharacterConfigContextValue>(

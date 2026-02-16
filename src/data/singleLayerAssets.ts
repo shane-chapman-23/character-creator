@@ -25,7 +25,7 @@ export const createSingleLayerDiagnostics = (): SingleLayerDiagnostics => ({
 });
 
 // Convert a filepath to a stable id, e.g.
-// ".../eyes/eyes_angry_2.png" -> "eyes_angry_2"
+// ".../eyes/eyes_2.png" -> "eyes_2"
 export const idFromPath = (path: string) => {
   const file = path.split("/").pop();
   if (!file) return null;

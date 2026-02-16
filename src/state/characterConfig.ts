@@ -4,6 +4,7 @@ import type {
   OptionId,
 } from "@/types/character";
 
+// If no saved character config found, it will revert back to default
 export const DEFAULT_CHARACTER_CONFIG: CharacterConfig = {
   parts: {
     hair: "hair_0_0",
