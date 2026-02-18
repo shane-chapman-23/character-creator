@@ -3,6 +3,7 @@ import type {
   CharacterPart,
   OptionId,
 } from "@/types/character";
+import { PALETTES } from "./palettes";
 
 // If no saved character config found, it will revert back to default
 export const DEFAULT_CHARACTER_CONFIG: CharacterConfig = {
@@ -23,7 +24,7 @@ export type AvailablePartIds = Record<CharacterPart, OptionId[]>;
 
 // If a saved config contains stale IDs (assets changed),
 // clamp them back into a currently valid option ID.
-export function clampConfigToAvailableIds(
+export function clampConfigToAvailableOptions(
   config: CharacterConfig,
   available: AvailablePartIds,
 ): CharacterConfig {
@@ -33,6 +34,8 @@ export function clampConfigToAvailableIds(
     if (!ids || ids.length === 0) return id;
     return ids.includes(id) ? id : ids[0];
   };
+  const safeColour = (i: number, len: number) =>
+    len <= 0 ? 0 : i >= 0 && i < len ? i : 0;
 
   return {
     ...config,
@@ -40,6 +43,12 @@ export function clampConfigToAvailableIds(
       hair: safeId("hair", config.parts.hair),
       eyes: safeId("eyes", config.parts.eyes),
       mouth: safeId("mouth", config.parts.mouth),
+    },
+    colours: {
+      skin: safeColour(config.colours.skin, PALETTES.skin.length),
+      hair: safeColour(config.colours.hair, PALETTES.hair.length),
+      top: safeColour(config.colours.top, PALETTES.top.length),
+      bottom: safeColour(config.colours.bottom, PALETTES.bottom.length),
     },
   };
 }

@@ -4,7 +4,7 @@ export const wrapIndex = (i: number, len: number) => {
   // Guard 0-length lists so callers always get a safe index.
   if (len <= 0) return 0;
   // Modulo with offset handles negative movement (prev) as well as next.
-  return (i + len) % len;
+  return ((i % len) + len) % len;
 };
 
 export const cycleId = (ids: OptionId[], currentId: OptionId, dir: 1 | -1) => {

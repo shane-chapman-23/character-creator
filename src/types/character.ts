@@ -1,4 +1,6 @@
 export type CharacterPart = "hair" | "eyes" | "mouth";
+export type CharacterColourPart = "skin" | "top" | "bottom" | "hair";
+export type ColourIndex = number;
 
 // Stable ID for a character part selection.
 // Keeps saves valid even if option ordering changes later.
