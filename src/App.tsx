@@ -1,4 +1,5 @@
 import CharacterPreview from "./components/CharacterPreview";
+import CharacterSelector from "./components/CharacterSelector";
 import PixelScale from "./components/PixelScale";
 
 function App() {
@@ -7,13 +8,17 @@ function App() {
       {/* Header */}
       <section></section>
       {/* Character Creator */}
-      <div>
+      <div className="flex">
+        {/* Preview */}
         <section>
           <PixelScale scale={2}>
             <CharacterPreview />
           </PixelScale>
         </section>
-        <section></section>
+        {/* Selector */}
+        <section>
+          <CharacterSelector />
+        </section>
       </div>
       {/* Footer */}
       <section></section>
