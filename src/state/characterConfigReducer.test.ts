@@ -6,7 +6,7 @@
  * Some cases intentionally bypass types to simulate corrupted persisted state.
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { createCharacterReducer } from "./characterConfigReducer";
 import { DEFAULT_CHARACTER_CONFIG } from "./characterConfig";
 import { PALETTES } from "./palettes";
