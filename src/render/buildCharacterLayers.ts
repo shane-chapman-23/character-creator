@@ -22,10 +22,22 @@ function pickById<T extends { id: string }>(list: readonly T[], id: string): T {
   return list.find((o) => o.id === id) ?? list[0];
 }
 
+function firstOrThrow<T>(arr: readonly T[], label: string): T {
+  const v = arr[0];
+  if (!v) throw new Error(`[assets] Missing ${label} (array is empty)`);
+  return v;
+}
+
 export function buildCharacterLayers(config: CharacterConfig): RenderLayer[] {
   const eyesOpt = pickById(EYES, config.parts.eyes);
   const mouthOpt = pickById(MOUTH, config.parts.mouth);
   const hairOpt = pickById(HAIR, config.parts.hair);
+
+  const legs0 = firstOrThrow(BODY_IDLE.legs, "BODY_IDLE.legs[0]");
+  const bottom0 = firstOrThrow(BODY_IDLE.bottom, "BODY_IDLE.bottom[0]");
+  const top0 = firstOrThrow(BODY_IDLE.top, "BODY_IDLE.top[0]");
+  const arms0 = firstOrThrow(BODY_IDLE.arms, "BODY_IDLE.arms[0]");
+  const head0 = firstOrThrow(HEAD, "HEAD[0]");
 
   const skinColour = SKIN_COLOURS[config.colours.skin];
   const hairColour = HAIR_COLOURS[config.colours.hair];
@@ -36,40 +48,40 @@ export function buildCharacterLayers(config: CharacterConfig): RenderLayer[] {
     {
       key: "legs",
       kind: "layered",
-      bg: BODY_IDLE.legs[0].value.bg,
-      outline: BODY_IDLE.legs[0].value.outline,
+      bg: legs0.value.bg,
+      outline: legs0.value.outline,
       colour: skinColour,
       altPrefix: "legs",
     },
     {
       key: "bottom",
       kind: "layered",
-      bg: BODY_IDLE.bottom[0].value.bg,
-      outline: BODY_IDLE.bottom[0].value.outline,
+      bg: bottom0.value.bg,
+      outline: bottom0.value.outline,
       colour: bottomColour,
       altPrefix: "bottom",
     },
     {
       key: "top",
       kind: "layered",
-      bg: BODY_IDLE.top[0].value.bg,
-      outline: BODY_IDLE.top[0].value.outline,
+      bg: top0.value.bg,
+      outline: top0.value.outline,
       colour: topColour,
       altPrefix: "top",
     },
     {
       key: "arms",
       kind: "layered",
-      bg: BODY_IDLE.arms[0].value.bg,
-      outline: BODY_IDLE.arms[0].value.outline,
+      bg: arms0.value.bg,
+      outline: arms0.value.outline,
       colour: skinColour,
       altPrefix: "arms",
     },
     {
       key: "head",
       kind: "layered",
-      bg: HEAD[0].value.bg,
-      outline: HEAD[0].value.outline,
+      bg: head0.value.bg,
+      outline: head0.value.outline,
       colour: skinColour,
       altPrefix: "head",
     },

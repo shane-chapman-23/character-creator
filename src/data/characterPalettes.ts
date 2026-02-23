@@ -28,6 +28,7 @@ export const TOP_COLOURS = [
   "#3B82F6",
   "#10B981",
   "#F59E0B",
+  "#fff9e3",
 ] as const;
 
 export const BOTTOM_COLOURS = [
@@ -38,4 +39,5 @@ export const BOTTOM_COLOURS = [
   "#3B82F6",
   "#10B981",
   "#F59E0B",
+  "#fff9e3",
 ] as const;

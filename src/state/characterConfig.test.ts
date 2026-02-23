@@ -3,6 +3,7 @@ import type { CharacterConfig } from "@/types/character";
 import {
   clampConfigToAvailableOptions,
   DEFAULT_CHARACTER_CONFIG,
+  type AvailablePartIds,
 } from "./characterConfig";
 import { PALETTES } from "./palettes";
 
@@ -28,10 +29,10 @@ describe("clampConfigToAvailableOptions", () => {
       hair: ["hair_0_0", "hair_1_0"],
       eyes: ["eyes0", "eyes1"],
       mouth: ["mouth0", "mouth1"],
-    } as any;
+    } satisfies AvailablePartIds;
 
     const cfg = makeConfig({
-      parts: { hair: "hair_1_0", eyes: "eyes1", mouth: "mouth1" } as any,
+      parts: { hair: "hair_1_0", eyes: "eyes1", mouth: "mouth1" },
     });
 
     const next = clampConfigToAvailableOptions(cfg, available);
@@ -44,10 +45,10 @@ describe("clampConfigToAvailableOptions", () => {
       hair: ["hair_a", "hair_b"],
       eyes: ["eyes_a", "eyes_b"],
       mouth: ["mouth_a", "mouth_b"],
-    } as any;
+    } satisfies AvailablePartIds;
 
     const cfg = makeConfig({
-      parts: { hair: "NOT_REAL", eyes: "eyes_b", mouth: "mouth_b" } as any,
+      parts: { hair: "NOT_REAL", eyes: "eyes_b", mouth: "mouth_b" },
     });
 
     const next = clampConfigToAvailableOptions(cfg, available);
@@ -62,14 +63,14 @@ describe("clampConfigToAvailableOptions", () => {
       hair: [],
       eyes: ["eyes0"],
       mouth: [],
-    } as any;
+    } satisfies AvailablePartIds;
 
     const cfg = makeConfig({
       parts: {
         hair: "hair_existing",
         eyes: "eyes0",
         mouth: "mouth_existing",
-      } as any,
+      },
     });
 
     const next = clampConfigToAvailableOptions(cfg, available);
@@ -90,7 +91,7 @@ describe("clampConfigToAvailableOptions", () => {
       hair: ["hair_0_0"],
       eyes: ["eyes0"],
       mouth: ["mouth0"],
-    } as any;
+    } satisfies AvailablePartIds;
 
     const cfg = makeConfig({
       colours: {
@@ -114,10 +115,10 @@ describe("clampConfigToAvailableOptions", () => {
       // hair intentionally omitted
       eyes: ["eyes0"],
       mouth: ["mouth0"],
-    } as any;
+    } as unknown as AvailablePartIds;
 
     const cfg = makeConfig({
-      parts: { hair: "hair_existing", eyes: "eyes0", mouth: "mouth0" } as any,
+      parts: { hair: "hair_existing", eyes: "eyes0", mouth: "mouth0" },
     });
 
     const next = clampConfigToAvailableOptions(cfg, available);

@@ -22,5 +22,7 @@ export default defineConfig({
         "**/src/vite-env.d.ts",
       ],
     },
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
   },
 });

@@ -1,4 +1,4 @@
-import CharacterPreview from "./components/CharacterPreview";
+import CharacterPreviewCanvas from "./components/CharacterPreviewCanvas";
 import CharacterSelector from "./components/CharacterSelector";
 import PixelScale from "./components/PixelScale";
 
@@ -12,7 +12,7 @@ function App() {
         {/* Preview */}
         <section>
           <PixelScale scale={2}>
-            <CharacterPreview />
+            <CharacterPreviewCanvas />
           </PixelScale>
         </section>
         {/* Selector */}
