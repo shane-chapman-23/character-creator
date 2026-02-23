@@ -31,6 +31,7 @@ function drawTintedMasked(
 
   // Clear previous frame
   TEMP_CTX.globalCompositeOperation = "source-over";
+  TEMP_CTX.imageSmoothingEnabled = false;
   TEMP_CTX.clearRect(0, 0, w, h);
 
   // Draw mask

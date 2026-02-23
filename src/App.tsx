@@ -11,7 +11,7 @@ function App() {
       <div className="flex">
         {/* Preview */}
         <section>
-          <PixelScale scale={2}>
+          <PixelScale scale={1}>
             <CharacterPreviewCanvas />
           </PixelScale>
         </section>

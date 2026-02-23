@@ -33,13 +33,13 @@ export default function CharacterPreviewCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.floor(SPRITE_W * dpr);
-    canvas.height = Math.floor(SPRITE_H * dpr);
-    canvas.style.width = `${SPRITE_W}px`;
-    canvas.style.height = `${SPRITE_H}px`;
+    // Render at native sprite resolution to avoid fractional DPR resampling.
+    canvas.width = SPRITE_W;
+    canvas.height = SPRITE_H;
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
 
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.imageSmoothingEnabled = false;
 
     const imgs = urls.map(getOrCreateImage);
@@ -76,7 +76,7 @@ export default function CharacterPreviewCanvas() {
   }, [allReady, layers, urls]);
 
   return (
-    <div className="relative w-[256px] h-[256px]">
+    <div className="relative w-full h-full">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 pixel-art"
