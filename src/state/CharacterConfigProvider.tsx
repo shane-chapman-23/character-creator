@@ -41,6 +41,7 @@ export type CharacterConfigContextValue = {
   reset: () => void;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const CharacterConfigContext =
   createContext<CharacterConfigContextValue | null>(null);
 

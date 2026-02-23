@@ -1,7 +1,7 @@
 type Props = {
   label: string;
-  onPrev: () => void;
-  onNext: () => void;
+  onPrev: () => void | Promise<void>;
+  onNext: () => void | Promise<void>;
 };
 
 export default function CycleSelector({ label, onPrev, onNext }: Props) {

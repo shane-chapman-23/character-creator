@@ -8,7 +8,10 @@
 
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { createCharacterReducer } from "./characterConfigReducer";
-import { DEFAULT_CHARACTER_CONFIG } from "./characterConfig";
+import {
+  DEFAULT_CHARACTER_CONFIG,
+  type AvailablePartIds,
+} from "./characterConfig";
 import { PALETTES } from "./palettes";
 import type { CharacterConfig } from "@/types/character";
 
@@ -53,7 +56,7 @@ vi.mock("./characterConfig", async () => {
     );
   return {
     ...actual,
-    clampConfigToAvailableOptions: (cfg: any) => cfg,
+    clampConfigToAvailableOptions: (cfg: CharacterConfig) => cfg,
   };
 });
 
@@ -91,13 +94,13 @@ const makeState = (overrides: StateOverrides = {}): CharacterConfig => {
 };
 
 describe("createCharacterReducer", () => {
-  const available = {
+  const available: AvailablePartIds = {
     hair: ["hair_a", "hair_b", "hair_c"],
     eyes: ["eyes_a", "eyes_b"],
     mouth: ["mouth_a", "mouth_b"],
-  } as const;
+  };
 
-  const reducer = createCharacterReducer(available as any);
+  const reducer = createCharacterReducer(available);
 
   // Restore all mocks between tests to avoid cross-test leakage
   // (e.g. Math.random spies persisting into later tests).
@@ -225,7 +228,7 @@ describe("createCharacterReducer", () => {
       hair: [],
       eyes: ["eyes_a"],
       mouth: [],
-    } as any);
+    } satisfies AvailablePartIds);
 
     const state = makeState({
       parts: { hair: "hair_existing", eyes: "eyes_a", mouth: "mouth_existing" },

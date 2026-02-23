@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { wrapIndex, cycleId, randomFrom } from "./selectorUtils";
+import type { OptionId } from "@/types/character";
 
 describe("wrapIndex", () => {
   it("returns 0 when len <= 0", () => {
@@ -26,30 +27,30 @@ describe("wrapIndex", () => {
 
 describe("cycleId", () => {
   it("returns currentId when ids is empty", () => {
-    expect(cycleId([], "x" as any, 1)).toBe("x");
-    expect(cycleId([], "x" as any, -1)).toBe("x");
+    expect(cycleId([], "x", 1)).toBe("x");
+    expect(cycleId([], "x", -1)).toBe("x");
   });
 
   it("cycles forward and wraps", () => {
-    const ids = ["a", "b", "c"] as any;
-    expect(cycleId(ids, "a" as any, 1)).toBe("b");
-    expect(cycleId(ids, "b" as any, 1)).toBe("c");
-    expect(cycleId(ids, "c" as any, 1)).toBe("a");
+    const ids: OptionId[] = ["a", "b", "c"];
+    expect(cycleId(ids, "a", 1)).toBe("b");
+    expect(cycleId(ids, "b", 1)).toBe("c");
+    expect(cycleId(ids, "c", 1)).toBe("a");
   });
 
   it("cycles backward and wraps", () => {
-    const ids = ["a", "b", "c"] as any;
-    expect(cycleId(ids, "a" as any, -1)).toBe("c");
-    expect(cycleId(ids, "c" as any, -1)).toBe("b");
-    expect(cycleId(ids, "b" as any, -1)).toBe("a");
+    const ids: OptionId[] = ["a", "b", "c"];
+    expect(cycleId(ids, "a", -1)).toBe("c");
+    expect(cycleId(ids, "c", -1)).toBe("b");
+    expect(cycleId(ids, "b", -1)).toBe("a");
   });
 
   it("recovers when currentId is not found by starting at 0", () => {
-    const ids = ["a", "b", "c"] as any;
+    const ids: OptionId[] = ["a", "b", "c"];
     // start=0; dir=1 -> "b"
-    expect(cycleId(ids, "NOT_REAL" as any, 1)).toBe("b");
+    expect(cycleId(ids, "NOT_REAL", 1)).toBe("b");
     // start=0; dir=-1 -> wraps to last
-    expect(cycleId(ids, "NOT_REAL" as any, -1)).toBe("c");
+    expect(cycleId(ids, "NOT_REAL", -1)).toBe("c");
   });
 });
 
@@ -59,11 +60,11 @@ describe("randomFrom", () => {
   });
 
   it('returns "" when ids is empty', () => {
-    expect(randomFrom([] as any)).toBe("");
+    expect(randomFrom([])).toBe("");
   });
 
   it("returns the element at the computed random index", () => {
-    const ids = ["a", "b", "c"] as any;
+    const ids: OptionId[] = ["a", "b", "c"];
 
     vi.spyOn(Math, "random").mockReturnValue(0); // idx=0
     expect(randomFrom(ids)).toBe("a");

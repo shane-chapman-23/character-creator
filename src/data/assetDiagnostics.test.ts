@@ -3,6 +3,8 @@ import {
   reportLayeredAssetDiagnostics,
   reportSingleLayerAssetDiagnostics,
 } from "./assetDiagnostics";
+import type { PairingDiagnostics } from "./pairLayeredAssets";
+import type { SingleLayerDiagnostics } from "./singleLayerAssets";
 
 describe("assetDiagnostics reporters (dev-only)", () => {
   let warnSpy: ReturnType<typeof vi.spyOn>;
@@ -22,7 +24,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         duplicates: [],
         missingBg: [],
         missingOutline: [],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       expect(warnSpy).not.toHaveBeenCalled();
     });
@@ -33,7 +35,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         duplicates: [],
         missingBg: [],
         missingOutline: [],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const msg = warnSpy.mock.calls[0][0] as string;
@@ -54,7 +56,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         ],
         missingBg: [],
         missingOutline: [],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const msg = warnSpy.mock.calls[0][0] as string;
@@ -70,7 +72,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         duplicates: [],
         missingBg: ["hair_2_0", "head_1_0"],
         missingOutline: [],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const msg = warnSpy.mock.calls[0][0] as string;
@@ -85,7 +87,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         duplicates: [],
         missingBg: [],
         missingOutline: ["hair_2_0"],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const msg = warnSpy.mock.calls[0][0] as string;
@@ -102,7 +104,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         ],
         missingBg: ["m1"],
         missingOutline: ["m2"],
-      } as any);
+      } satisfies PairingDiagnostics);
 
       // unrecognized + duplicates + missingBg + missingOutline
       expect(warnSpy).toHaveBeenCalledTimes(4);
@@ -111,7 +113,9 @@ describe("assetDiagnostics reporters (dev-only)", () => {
 
   describe("reportSingleLayerAssetDiagnostics", () => {
     it("does nothing when there are no duplicates", () => {
-      reportSingleLayerAssetDiagnostics("eyes", { duplicates: [] } as any);
+      reportSingleLayerAssetDiagnostics("eyes", {
+        duplicates: [],
+      } satisfies SingleLayerDiagnostics);
       expect(warnSpy).not.toHaveBeenCalled();
     });
 
@@ -120,7 +124,7 @@ describe("assetDiagnostics reporters (dev-only)", () => {
         duplicates: [
           { id: "eyes0", existingPath: "/old.png", newPath: "/new.png" },
         ],
-      } as any);
+      } satisfies SingleLayerDiagnostics);
 
       expect(warnSpy).toHaveBeenCalledTimes(1);
       const msg = warnSpy.mock.calls[0][0] as string;
