@@ -3,26 +3,26 @@ type Props = {
   scale?: number;
 };
 
-// Renders pixel art at its native resolution (256x256),
-// then scales the already-rendered result using CSS transforms
-// to preserve crisp pixel edges.
-//
-// Resizing a 256px sprite to (e.g.) 512px via layout causes the browser
-// to resample the image, which can blur edges even with
-// 'image-rendering: pixelated' set.
+const BASE = 256;
+
 export default function PixelScale({ children, scale = 2 }: Props) {
+  const dpr = window.devicePixelRatio || 1;
+
+  // Snap upward so source pixels map to whole physical pixels without shrinking intent.
+  const snappedScale = Math.max(1, Math.ceil(scale * dpr) / dpr);
+
   return (
     <div
       style={{
-        width: 256 * scale,
-        height: 256 * scale,
+        width: BASE * snappedScale,
+        height: BASE * snappedScale,
         overflow: "hidden",
       }}
     >
       <div
         style={{
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
+          width: BASE * snappedScale,
+          height: BASE * snappedScale,
         }}
       >
         {children}
