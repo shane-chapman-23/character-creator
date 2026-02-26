@@ -9,7 +9,32 @@ import CharacterPreviewCanvas from "./CharacterPreviewCanvas";
 // We don't care about real config here.
 vi.mock("@/state/useCharacterConfig", () => ({
   useCharacterConfig: () => ({
-    config: {},
+    config: {
+      parts: {
+        hair: "hair_0_0",
+        eyes: "eyes0",
+        mouth: "mouth0",
+      },
+      colours: {
+        skin: 0,
+        hair: 0,
+        top: 0,
+        bottom: 0,
+      },
+    },
+    nextRandomConfig: {
+      parts: {
+        hair: "hair_1_0",
+        eyes: "eyes1",
+        mouth: "mouth1",
+      },
+      colours: {
+        skin: 1,
+        hair: 1,
+        top: 1,
+        bottom: 1,
+      },
+    },
   }),
 }));
 

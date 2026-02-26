@@ -12,18 +12,21 @@ import type {
   CharacterColourPart,
   ColourIndex,
 } from "@/types/character";
+import type { AvailablePartIds } from "./characterConfig";
 import {
   DEFAULT_CHARACTER_CONFIG,
   clampConfigToAvailableOptions,
 } from "./characterConfig";
 import { createCharacterReducer } from "./characterConfigReducer";
 import { AVAILABLE_PART_IDS } from "./availablePartIds";
+import { PALETTES } from "./palettes";
 
 // Versioned key so we can invalidate old persisted shapes safely.
 const STORAGE_KEY = "character_config_v1";
 
 export type CharacterConfigContextValue = {
   config: CharacterConfig;
+  nextRandomConfig: CharacterConfig;
 
   // Part selection (stable IDs)
   setPartId: (part: CharacterPart, id: OptionId) => void;
@@ -40,6 +43,38 @@ export type CharacterConfigContextValue = {
   // Convenience: reset to defaults
   reset: () => void;
 };
+
+function buildRandomConfig(
+  base: CharacterConfig,
+  available: AvailablePartIds,
+): CharacterConfig {
+  const randFrom = (ids: OptionId[], fallback: OptionId) => {
+    if (ids.length === 0) return fallback;
+    return ids[Math.floor(Math.random() * ids.length)]!;
+  };
+
+  const randIndex = (len: number, fallback: number) => {
+    if (len <= 0) return fallback;
+    return Math.floor(Math.random() * len);
+  };
+
+  return {
+    ...base,
+    parts: {
+      ...base.parts,
+      hair: randFrom(available.hair ?? [], base.parts.hair),
+      eyes: randFrom(available.eyes ?? [], base.parts.eyes),
+      mouth: randFrom(available.mouth ?? [], base.parts.mouth),
+    },
+    colours: {
+      ...base.colours,
+      skin: randIndex(PALETTES.skin.length, base.colours.skin),
+      hair: randIndex(PALETTES.hair.length, base.colours.hair),
+      top: randIndex(PALETTES.top.length, base.colours.top),
+      bottom: randIndex(PALETTES.bottom.length, base.colours.bottom),
+    },
+  };
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CharacterConfigContext =
@@ -71,6 +106,13 @@ export function CharacterConfigProvider({
       }
     },
   );
+
+  const nextRandomConfig = useMemo(() => {
+    return clampConfigToAvailableOptions(
+      buildRandomConfig(config, AVAILABLE_PART_IDS),
+      AVAILABLE_PART_IDS,
+    );
+  }, [config]);
 
   // Persist after any config mutation so refresh keeps current selections.
   useEffect(() => {
@@ -105,8 +147,8 @@ export function CharacterConfigProvider({
   }, []);
 
   const randomizeConfig = useCallback(() => {
-    dispatch({ type: "config/randomize" });
-  }, []);
+    dispatch({ type: "config/apply", config: nextRandomConfig });
+  }, [nextRandomConfig]);
 
   const reset = useCallback(() => {
     dispatch({ type: "config/reset" });
@@ -116,6 +158,7 @@ export function CharacterConfigProvider({
   const value = useMemo<CharacterConfigContextValue>(
     () => ({
       config,
+      nextRandomConfig,
       setPartId,
       nextPart,
       prevPart,
@@ -127,6 +170,7 @@ export function CharacterConfigProvider({
     }),
     [
       config,
+      nextRandomConfig,
       setPartId,
       nextPart,
       prevPart,

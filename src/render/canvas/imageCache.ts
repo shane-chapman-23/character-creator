@@ -20,6 +20,11 @@ export function isLoaded(img: HTMLImageElement) {
   return img.complete && img.naturalWidth > 0;
 }
 
+// True once the image has either loaded or failed.
+export function isSettled(img: HTMLImageElement) {
+  return img.complete;
+}
+
 // Preloads a set of image URLs and resolves when all are ready to draw.
 export function preloadImages(urls: string[]) {
   // Remove duplicate URLs so we don't attach multiple listeners per image.
@@ -28,7 +33,7 @@ export function preloadImages(urls: string[]) {
   return Promise.all(
     unique.map((u) => {
       const img = getOrCreateImage(u);
-      if (isLoaded(img)) return Promise.resolve(true);
+      if (isSettled(img)) return Promise.resolve(isLoaded(img));
 
       return new Promise<boolean>((resolve) => {
         // When the image loads or errors, clean up listeners and resolve.
