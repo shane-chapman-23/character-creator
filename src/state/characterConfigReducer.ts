@@ -19,7 +19,8 @@ export type CharacterAction =
   | { type: "colour/set"; part: CharacterColourPart; index: ColourIndex }
   | { type: "colour/cycle"; part: CharacterColourPart; dir: 1 | -1 }
   | { type: "config/randomize" }
-  | { type: "config/reset" };
+  | { type: "config/reset" }
+  | { type: "config/apply"; config: CharacterConfig };
 
 // Ensures selected part IDs still exist in available assets (fallback to first valid option if not).
 const clampPartsOnly = (
@@ -121,6 +122,12 @@ export const createCharacterReducer =
           DEFAULT_CHARACTER_CONFIG,
           available,
         );
+        break;
+      }
+
+      case "config/apply": {
+        // Apply an externally-built config, then clamp for safety.
+        next = clampConfigToAvailableOptions(action.config, available);
         break;
       }
 

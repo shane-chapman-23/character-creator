@@ -1,28 +1,41 @@
 import { useEffect, useMemo, useReducer, useRef } from "react";
 import { useCharacterConfig } from "@/state/useCharacterConfig";
 import { buildCharacterLayers } from "@/render/buildCharacterLayers";
+import { renderCharacterToCanvas } from "@/render/canvas/canvasRenderer";
 import {
-  collectLayerUrls,
-  renderCharacterToCanvas,
-} from "@/render/canvas/canvasRenderer";
-import { getOrCreateImage, isLoaded } from "@/render/canvas/imageCache";
+  getOrCreateImage,
+  isSettled,
+  preloadImages,
+} from "@/render/canvas/imageCache";
 import { logCanvasLoadState } from "@/render/canvas/canvasDiagnostics";
+import { getAdjacentConfigs, getConfigUrls } from "@/render/warmBubble";
 
 const SPRITE_W = 256;
 const SPRITE_H = 256;
 
 export default function CharacterPreviewCanvas() {
-  const { config } = useCharacterConfig();
+  const { config, nextRandomConfig } = useCharacterConfig();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [, bumpLoadTick] = useReducer((n: number) => n + 1, 0);
 
   // Build renderable layers (order matters) from the current config.
   const layers = useMemo(() => buildCharacterLayers(config), [config]);
   const urls = useMemo(
-    () => Array.from(new Set(collectLayerUrls(layers))),
-    [layers],
+    () => Array.from(new Set(getConfigUrls(config))),
+    [config],
   );
-  const allReady = urls.every((url) => isLoaded(getOrCreateImage(url)));
+  const imgs = useMemo(() => urls.map(getOrCreateImage), [urls]);
+  const allSettled = imgs.every(isSettled);
+
+  const warmUrls = useMemo(() => {
+    const configs = [config, ...getAdjacentConfigs(config), nextRandomConfig];
+    const urls = configs.flatMap(getConfigUrls);
+    return Array.from(new Set(urls));
+  }, [config, nextRandomConfig]);
+
+  useEffect(() => {
+    preloadImages(warmUrls);
+  }, [warmUrls]);
 
   // Sets up the canvas for the current layers, draws immediately,
   // and listens for image load/error events to redraw assets become ready.
@@ -42,8 +55,6 @@ export default function CharacterPreviewCanvas() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.imageSmoothingEnabled = false;
 
-    const imgs = urls.map(getOrCreateImage);
-
     // Dev-only: logs how many required assets are loaded for this render.
     logCanvasLoadState("CharacterPreview", urls, imgs);
 
@@ -51,7 +62,7 @@ export default function CharacterPreviewCanvas() {
 
     draw();
 
-    if (!allReady) {
+    if (!allSettled) {
       let alive = true;
       const onAnyLoad = () => {
         if (!alive) return;
@@ -60,7 +71,7 @@ export default function CharacterPreviewCanvas() {
       };
 
       for (const img of imgs) {
-        if (isLoaded(img)) continue;
+        if (isSettled(img)) continue;
         img.addEventListener("load", onAnyLoad);
         img.addEventListener("error", onAnyLoad);
       }
@@ -73,7 +84,7 @@ export default function CharacterPreviewCanvas() {
         }
       };
     }
-  }, [allReady, layers, urls]);
+  }, [allSettled, layers, urls, imgs]);
 
   return (
     <div className="relative w-full h-full">
@@ -83,7 +94,7 @@ export default function CharacterPreviewCanvas() {
         aria-label="Character preview"
       />
 
-      {!allReady && (
+      {!allSettled && (
         <div className="absolute inset-0 grid place-items-center">
           <div className="rounded-xl bg-black/40 px-3 py-2 text-white text-sm">
             Loading…
