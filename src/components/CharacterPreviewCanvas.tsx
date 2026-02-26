@@ -76,6 +76,8 @@ export default function CharacterPreviewCanvas() {
         img.addEventListener("error", onAnyLoad);
       }
 
+      onAnyLoad();
+
       return () => {
         alive = false;
         for (const img of imgs) {
