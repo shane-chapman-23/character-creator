@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 
@@ -6,35 +6,39 @@ import CharacterPreviewCanvas from "./CharacterPreviewCanvas";
 
 // --- mocks ---
 
+const stableConfig = {
+  parts: {
+    hair: "hair_0_0",
+    eyes: "eyes0",
+    mouth: "mouth0",
+  },
+  colours: {
+    skin: 0,
+    hair: 0,
+    top: 0,
+    bottom: 0,
+  },
+};
+
+const stableNextRandomConfig = {
+  parts: {
+    hair: "hair_1_0",
+    eyes: "eyes1",
+    mouth: "mouth1",
+  },
+  colours: {
+    skin: 1,
+    hair: 1,
+    top: 1,
+    bottom: 1,
+  },
+};
+
 // We don't care about real config here.
 vi.mock("@/state/useCharacterConfig", () => ({
   useCharacterConfig: () => ({
-    config: {
-      parts: {
-        hair: "hair_0_0",
-        eyes: "eyes0",
-        mouth: "mouth0",
-      },
-      colours: {
-        skin: 0,
-        hair: 0,
-        top: 0,
-        bottom: 0,
-      },
-    },
-    nextRandomConfig: {
-      parts: {
-        hair: "hair_1_0",
-        eyes: "eyes1",
-        mouth: "mouth1",
-      },
-      colours: {
-        skin: 1,
-        hair: 1,
-        top: 1,
-        bottom: 1,
-      },
-    },
+    config: stableConfig,
+    nextRandomConfig: stableNextRandomConfig,
   }),
 }));
 
@@ -81,6 +85,10 @@ beforeEach(() => {
   created = new Map();
 
   vi.stubGlobal("Image", class extends MockImage {} as unknown as typeof Image);
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
 });
 
 describe("CharacterPreviewCanvas", () => {
