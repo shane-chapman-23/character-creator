@@ -42,18 +42,27 @@ vi.mock("@/state/useCharacterConfig", () => ({
   }),
 }));
 
-// Force a predictable layer set
+// Keep URL collection deterministic for this test.
+vi.mock("@/render/warmBubble", () => ({
+  getAdjacentConfigs: () => [],
+  getConfigUrls: () => ["/hair_bg.png", "/hair_outline.png"],
+}));
+
+// Keep first-frame layer collection deterministic for diagnostics.
 vi.mock("@/render/buildCharacterLayers", () => ({
-  buildCharacterLayers: () => [
-    {
-      key: "hair",
-      kind: "layered",
-      bg: "/hair_bg.png",
-      outline: "/hair_outline.png",
-      colour: "#fff",
-      altPrefix: "hair",
-    },
-  ],
+  buildCharacterLayers: () => ({
+    body: [
+      {
+        key: "hair",
+        kind: "layered",
+        bg: "/hair_bg.png",
+        outline: "/hair_outline.png",
+        colour: "#fff",
+        altPrefix: "hair",
+      },
+    ],
+    head: [],
+  }),
 }));
 
 // Keep references so tests can trigger load later.
@@ -93,7 +102,7 @@ afterEach(() => {
 
 describe("CharacterPreviewCanvas", () => {
   it("shows loading overlay until images are ready, then hides it", async () => {
-    render(<CharacterPreviewCanvas />);
+    render(<CharacterPreviewCanvas anim="idle" />);
 
     // Spinner should be visible initially
     expect(screen.getByText("Loading…")).toBeInTheDocument();

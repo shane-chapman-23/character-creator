@@ -1,8 +1,13 @@
+import { useState } from "react";
 import CharacterPreviewCanvas from "./components/CharacterPreviewCanvas";
 import CharacterSelector from "./components/CharacterSelector";
 import PixelScale from "./components/PixelScale";
+import AnimationControls from "./components/AnimationControls";
+import type { Anim } from "@/render/animation/bodyFrames";
 
 function App() {
+  const [anim, setAnim] = useState<Anim>("idle");
+
   return (
     <main className="bg-blue-500 w-screen h-screen flex flex-col items-center justify-between">
       {/* Header */}
@@ -12,7 +17,7 @@ function App() {
         {/* Preview */}
         <section>
           <PixelScale scale={1}>
-            <CharacterPreviewCanvas />
+            <CharacterPreviewCanvas anim={anim} />
           </PixelScale>
         </section>
         {/* Selector */}
@@ -21,7 +26,9 @@ function App() {
         </section>
       </div>
       {/* Footer */}
-      <section></section>
+      <section>
+        <AnimationControls anim={anim} setAnim={setAnim} />
+      </section>
     </main>
   );
 }
