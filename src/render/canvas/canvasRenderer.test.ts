@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import type { RenderLayer } from "./canvasRenderer";
+import type { RenderLayer } from "@/render/buildCharacterLayers";
 
 import { collectLayerUrls } from "./canvasRenderer";
 
