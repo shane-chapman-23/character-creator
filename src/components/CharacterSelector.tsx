@@ -2,7 +2,7 @@ import { useCharacterConfig } from "@/state/useCharacterConfig";
 import CycleSelector from "./CycleSelector";
 
 export default function CharacterSelector() {
-  const { nextPart, prevPart, nextColour, prevColour, randomizeConfig, reset } =
+  const { nextPart, prevPart, nextColour, prevColour, randomizeConfig } =
     useCharacterConfig();
 
   const controls = [
