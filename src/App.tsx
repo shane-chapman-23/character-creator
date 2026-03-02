@@ -9,16 +9,17 @@ function App() {
   const [anim, setAnim] = useState<Anim>("idle");
 
   return (
-    <main className="bg-blue-500 w-screen h-screen flex flex-col items-center justify-between">
+    <main className="bg-bg w-screen h-screen flex flex-col items-center justify-between">
       {/* Header */}
       <section></section>
       {/* Character Creator */}
       <div className="flex">
         {/* Preview */}
-        <section>
+        <section className="flex flex-col items-center gap-6">
           <PixelScale scale={1}>
             <CharacterPreviewCanvas anim={anim} />
           </PixelScale>
+          <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
         <section>
@@ -26,9 +27,7 @@ function App() {
         </section>
       </div>
       {/* Footer */}
-      <section>
-        <AnimationControls anim={anim} setAnim={setAnim} />
-      </section>
+      <section></section>
     </main>
   );
 }
