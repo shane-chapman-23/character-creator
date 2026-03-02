@@ -15,6 +15,7 @@ export const SKIN_COLOURS = [
 export const HAIR_COLOURS = [
   "#3B82F6",
   "#FFD86B",
+  "#d7b7eb",
   "#6B4C3B",
   "#C94B35",
   "#10B981",
@@ -25,6 +26,7 @@ export const HAIR_COLOURS = [
 
 export const TOP_COLOURS = [
   "#FFD86B",
+  "#d7b7eb",
   "#6B4C3B",
   "#C94B35",
   "#3B82F6",
@@ -37,6 +39,7 @@ export const TOP_COLOURS = [
 export const BOTTOM_COLOURS = [
   "#322b28",
   "#FFD86B",
+  "#d7b7eb",
   "#6B4C3B",
   "#C94B35",
   "#3B82F6",
