@@ -5,7 +5,7 @@ export const SKIN_COLOURS = [
   "#dba463",
   "#f4d29c",
   "#fbe0b7",
-  "#fef3c0",
+  "#f3ea9e",
   "#93ebf5",
   "#e86a73",
   "#b784d6",
