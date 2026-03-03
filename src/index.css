@@ -7,14 +7,14 @@
 
 @theme {
   --color-bg: #50b8ff;
+  --color-bg-2: #256a9a;
   --color-surface: #f4e7e7;
   --color-surface-2: #f1e3e3;
   --color-text: #000000;
   --color-accent: #ff7e26;
-  --color-button: #c54dcf;
+  --color-button: #73ef7a;
 
-
-  --text-h1: 72px;
+  --text-h1: 48px;
   --text-h2: 32px;
   --text-h3: 24px;
   --text-h4: 18px;
@@ -37,7 +37,7 @@
 }
 
 @layer base {
-  button {
+  .btn {
     border-radius: var(--radius-button);
     border: var(--stroke) solid var(--color-text);
     box-shadow: var(--shadow-brutal);
@@ -47,14 +47,18 @@
     transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
 
-  button:active {
+  .btn:active {
     transform: translate(4px, 4px);
     box-shadow: var(--shadow-brutal-pressed);
   }
 
+
+
+
     h1 {
     font-size: var(--text-h1);
     line-height: 80%;
+    
     font-weight: 900;
     font-family: var(--font-pixel);
     
@@ -62,7 +66,7 @@
       2px -2px 0 var(--color-text), -2px 0px 0 var(--color-text),
       2px 0px 0 var(--color-text), -2px 2px 0 var(--color-text),
       0px 2px 0 var(--color-text), 2px 2px 0 var(--color-text),
-      4px 4px 0 var(--color-text);
+      2px 2px 0 var(--color-text);
   }
 }
 

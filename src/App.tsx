@@ -9,11 +9,12 @@ function App() {
   const [anim, setAnim] = useState<Anim>("idle");
 
   return (
-    <main className="bg-bg w-screen h-screen flex flex-col items-center justify-between">
+    <main className="bg-bg w-full min-h-screen flex flex-col items-center justify-center p-4 px-4">
       {/* Header */}
+
       <section></section>
       {/* Character Creator */}
-      <div className="flex">
+      <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start">
         {/* Preview */}
         <section className="flex flex-col items-center gap-6">
           <PixelScale scale={1}>
@@ -22,7 +23,7 @@ function App() {
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
-        <section>
+        <section className="my-auto overflow-x-clip max-w-full">
           <CharacterSelector />
         </section>
       </div>
