@@ -23,7 +23,7 @@ function App() {
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
-        <section className="my-auto overflow-x-clip max-w-full">
+        <section className="my-auto max-w-full">
           <CharacterSelector />
         </section>
       </div>
