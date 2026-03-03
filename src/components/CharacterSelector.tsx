@@ -28,7 +28,24 @@ export default function CharacterSelector() {
 
   return (
     <div className="flex flex-col py-2 p-4 bg-surface rounded-xl shadow-card/40 border-3 max-w-90 max-h-[70vh] items-center font-inter">
-      <h1 className="text-center text-accent text-4xl">CHARACTER CREATOR</h1>
+      <div className="flex gap-2 items-center w-full mb-2">
+        {/* Dice */}
+        <button
+          className="p-[4px] flex flex-col h-10 w-10 rounded-lg bg-accent text-text font-inter font-extrabold mx-left  m-2 btn justify-between"
+          onClick={randomizeConfig}
+        >
+          <div className="flex justify-between">
+            <div className="h-[8px] w-[8px] bg-black rounded-[3px]"></div>
+            <div className="h-[8px] w-[8px] bg-black rounded-[3px]"></div>
+          </div>
+          <div className="h-[8px] w-[8px] bg-black rounded-[3px] mx-auto"></div>
+          <div className="flex justify-between">
+            <div className="h-[8px] w-[8px] bg-black rounded-[3px]"></div>
+            <div className="h-[8px] w-[8px] bg-black rounded-[3px]"></div>
+          </div>
+        </button>
+        <h1 className="text-center text-accent text-3xl">Randomize</h1>
+      </div>
       <div className="w-full">
         {/* Tab bar */}
         <div className="flex gap border-b-3 border-text px-1">
@@ -88,14 +105,6 @@ export default function CharacterSelector() {
             ))}
           </div>
         </div>
-      </div>
-      <div className="flex gap-2 ">
-        <button
-          className="p-4 py-2 rounded-full bg-accent text-text font-inter font-extrabold mx-left  m-2 btn"
-          onClick={randomizeConfig}
-        >
-          Random
-        </button>
       </div>
     </div>
   );

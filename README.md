@@ -1,8 +1,14 @@
 # Pixel Character Creator
 
-A modular pixel-art character creator built with React, TypeScript, and Vite.
+Live Demo: https://character-creator-orpin.vercel.app/
 
-The app composes layered sprites on an HTML canvas, tints mask layers at runtime, and keeps selections stable via ID-based config persistence.
+A modular pixel-art character creator built with React, TypeScript, Vite, and Tailwind CSS.
+
+The app composes layered sprites on canvas, applies runtime palette tinting, and keeps selections stable with ID-based config persistence, ensuring saved characters remain stable even when asset sets change.
+
+## Preview
+
+![Character Creator Demo](docs/demo.gif)
 
 ## Quick Start
 
@@ -11,64 +17,65 @@ npm install
 npm run dev
 ```
 
-Scripts:
+## Scripts
 
 - `npm run dev` - start local dev server
 - `npm run build` - type-check and build for production
-- `npm run preview` - serve the production build locally
+- `npm run preview` - preview the production build locally
+- `npm run lint` - run ESLint
 - `npm run test` - run Vitest
 - `npm run test:watch` - run tests in watch mode
 - `npm run test:coverage` - run tests with coverage
-- `npm run lint` - run ESLint
 
 ## Current Features
 
-- Layered character rendering (`bg` + `outline`) for body/head/hair
+- Layered sprite rendering (`bg` + `outline`) for body, head, and hair
 - Single-layer overlays for eyes and mouth
 - Runtime palette swaps using canvas compositing (`source-in`)
-- Configurable parts and colours with prev/next controls
-- `Randomize` and `Reset` actions
-- Local persistence (`character_config_v1`) with safe clamping when assets change
+- Selector tabs for body, face, and clothing options
+- Animation mode toggle (`idle` / `run`)
+- Randomize action with precomputed next random config
+- Local persistence (`character_config_v1`) with clamping when assets change
 - Image caching and warm preloading for likely next selections
-- Dev-only diagnostics for missing pairs, duplicates, and unrecognized names
+- Dev-time diagnostics for invalid/missing/duplicate layered assets
 
 ## Rendering Pipeline
 
-1. `buildCharacterLayers` maps the current `CharacterConfig` to ordered render layers.
-2. `renderCharacterToCanvas` draws each layer into a 256x256 canvas.
-3. Layered parts are tinted by drawing `bg`, filling color with `source-in`, then drawing `outline`.
-4. Images are fetched through a shared cache (`getOrCreateImage`) to avoid redundant loads.
+1. `buildCharacterLayers` maps `CharacterConfig` to ordered render groups (`body` and `head`).
+2. `useCharacterPreviewRenderer` runs a requestAnimationFrame loop.
+3. Body frames are selected from `BODY_IDLE` or `BODY_RUN` via `getBodyFrameIndex`.
+4. Layered parts draw as: `bg` mask -> tint fill (`source-in`) -> `outline`.
+5. Assets are loaded through shared cache helpers (`getOrCreateImage`, `preloadImages`).
 
 Current draw order:
 
-1. Legs
-2. Bottom
-3. Top
-4. Arms
-5. Head
-6. Eyes
-7. Mouth
-8. Hair
+- Body: legs -> bottom -> top -> arms
+- Head: head -> eyes -> mouth -> hair
+
+Notes:
+
+- Body and head are rendered on separate canvases so head bob/tilt transforms do not affect body layers.
+- Run mode uses a smoothed 3-frame pattern (`0-1-2-1`) when applicable.
 
 ## Preloading Strategy
 
-The preview preloads:
+The preview preloads URLs for:
 
-- the current config
-- all one-step adjacent configs (prev/next for each part and colour)
-- the precomputed next random config
+- current config
+- one-step adjacent configs (prev/next by part and colour)
+- precomputed next random config
 
 This is built in `src/render/warmBubble.ts` and consumed by `CharacterPreviewCanvas`.
 
-Notes on loading behavior:
+Important behavior:
 
-- duplicate URLs are deduped before preloading
-- images are treated as settled when `img.complete` is true (loaded or failed)
-- the loading overlay clears when required images are settled, preventing stuck UI on broken assets
+- dedupes URLs before preloading
+- preloads both idle and run assets
+- loading overlay clears when required images are settled (loaded or failed)
 
 ## Asset Pipeline
 
-Assets are eagerly discovered with Vite `import.meta.glob` and converted into stable options at module initialization.
+Assets are discovered with Vite `import.meta.glob` and converted into stable options at module initialization.
 
 Supported asset types:
 
@@ -77,7 +84,7 @@ Supported asset types:
    - `*_outline.png`
 2. Single-layer assets (`eyes`, `mouth`) as standalone `.png` files
 
-Layered keys are filename-derived (examples):
+Layered key examples:
 
 - `hair_3_0_outline.png` + `hair_3_0_bg.png` -> `hair_3_0`
 - `body_idle_arms_1_outline.png` + `body_idle_arms_1_bg.png` -> `body_idle_arms_1`
@@ -106,16 +113,16 @@ State is reducer-driven and provided via `CharacterConfigProvider`.
 Config shape:
 
 - `parts`: IDs for `hair`, `eyes`, `mouth`
-- `colours`: indices for `skin`, `hair`, `top`, `bottom`
+- `colours`: indexes for `skin`, `hair`, `top`, `bottom`
 
 On startup and on config application, values are clamped to currently available options so stale persisted values cannot break rendering.
 
 ## Project Structure
 
-- `src/components` - preview canvas, selectors, scale wrapper
-- `src/render` - layer building, canvas renderer, image cache, warm preload logic
+- `src/components` - preview canvas, selectors, animation controls, scale wrapper
+- `src/render` - layer building, animation timing, canvas renderers, image cache, preload logic
 - `src/state` - config types, reducer, provider, selector helpers, available IDs/palettes
-- `src/data` - asset discovery, pairing, diagnostics, palette data
+- `src/data` - asset discovery, pair validation, diagnostics, palette data
 
 ## Testing
 
@@ -125,4 +132,4 @@ Vitest coverage includes:
 - single-layer asset ID mapping
 - reducer and config clamping behavior
 - selector utility behavior
-- canvas/image-cache behavior
+- canvas renderer and image-cache behavior
