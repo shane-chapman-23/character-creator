@@ -12,7 +12,7 @@ function App() {
     <main className="bg-bg w-full min-h-screen flex flex-col items-center py-2 px-4">
       {/* Header */}
       <section>
-        <h1 className="text-surface text-5xl md:text-7xl lg:text-9xl">
+        <h1 className="text-surface text-5xl md:text-7xl lg:text-9xl -mb-10">
           Character Creator
         </h1>
       </section>
@@ -31,7 +31,7 @@ function App() {
         </section>
       </div>
       {/* Footer */}
-      <section className="flex flex-col h-[100px]">
+      <section className="flex flex-col h-[100px] lg:h-35">
         <p className="mt-auto font-inter text-center">
           Interested in working together? <br />
           Email me at{" "}
