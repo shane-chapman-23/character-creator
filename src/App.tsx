@@ -12,7 +12,7 @@ function App() {
     <main className="bg-bg w-full min-h-screen flex flex-col items-center py-2 px-4">
       {/* Header */}
       <section>
-        <h1 className="text-surface text-5xl md:text-7xl lg:text-9xl -mb-10">
+        <h1 className="text-surface text-5xl md:text-7xl lg:text-9xl -mb-10 text-center">
           Character Creator
         </h1>
       </section>
