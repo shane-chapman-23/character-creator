@@ -66,19 +66,49 @@ html, body {
   }
 }
 
+/* real hitbox */
 .btn {
-  border-radius: var(--radius-button);
-  border: var(--stroke) solid var(--color-text);
-  box-shadow: var(--shadow-brutal);    
+  position: relative;
+  display: inline-flex;
+  width: 100%;             
+  padding: 0;               
+  border: 0;
+  background: transparent;
   cursor: pointer;
   user-select: none;
-  transform: translate(0, 0);
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
-.btn:active {
+/* fixed shadow behind everything */
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-button);
+  box-shadow: var(--shadow-brutal);
+  transform: translate(-1px, -1px);
+  pointer-events: none;
+}
+
+/* moving face (includes border + background + label) */
+.btn__face {
+  position: relative;
+  z-index: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  border-radius: var(--radius-button);
+  border: var(--stroke) solid var(--color-text);
+
+  transform: translate(0, 0);
+  transition: transform 0.08s ease;
+}
+
+/* press = face moves down over the shadow */
+.btn:active .btn__face {
   transform: translate(4px, 4px);
-  box-shadow: var(--shadow-brutal-pressed);
 }
 
 .inset-divider {
