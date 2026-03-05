@@ -31,29 +31,12 @@ function App() {
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
-        <section className="mt-auto max-w-full">
+        <section className="my-auto max-w-full">
           <CharacterSelector />
-          <p className="hidden xl:block mt-6 font-inter text-center">
-            Interested in working together? <br />
-            Email me at{" "}
-            <a href="mailto:chapman.shane@proton.me" className="text-surface">
-              {" "}
-              chapman.shane@proton.me
-            </a>
-          </p>
         </section>
       </div>
       {/* Footer */}
-      <section className="flex flex-col h-[100px] lg:h-35 xl:hidden">
-        <p className="mt-auto font-inter text-center">
-          Interested in working together? <br />
-          Email me at{" "}
-          <a href="mailto:chapman.shane@proton.me" className="text-surface">
-            {" "}
-            chapman.shane@proton.me
-          </a>
-        </p>
-      </section>
+      <section className="flex flex-col h-[100px] lg:h-35 xl:hidden"></section>
     </main>
   );
 }

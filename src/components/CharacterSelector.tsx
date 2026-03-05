@@ -27,7 +27,7 @@ export default function CharacterSelector() {
   const controls = sections[section];
 
   return (
-    <div className="flex flex-col py-2 p-4 bg-surface rounded-xl shadow-card/40 border-3 max-w-90 max-h-[70vh] items-center font-inter">
+    <div className="flex flex-col py-2 p-4 bg-surface rounded-xl shadow-card/40 border-3 max-w-90 h-80 items-center font-inter">
       <div className="flex gap-2 items-center w-full mb-2">
         <button className="btn m-2" onClick={randomizeConfig}>
           <span className="btn__face p-[4px] bg-accent rounded-lg text-text font-inter font-extrabold">
@@ -95,6 +95,14 @@ export default function CharacterSelector() {
           </div>
         </div>
       </div>
+      <p className="block mt-auto font-inter text-center text-black/50 text-sm">
+        Interested in working together? <br />
+        Email me at{" "}
+        <a href="mailto:chapman.shane@proton.me" className="text-blue-700">
+          {" "}
+          chapman.shane@proton.me
+        </a>
+      </p>
     </div>
   );
 }
