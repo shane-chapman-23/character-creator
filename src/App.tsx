@@ -20,7 +20,12 @@ function App() {
       <div className="flex flex-col items-center gap-8 xl:flex-row xl:items-start">
         {/* Preview */}
         <section className="flex flex-col items-center gap-6">
-          <PixelScale minScale={1} maxScale={5} widthFraction={0.48} heightFraction={0.7}>
+          <PixelScale
+            minScale={1}
+            maxScale={5}
+            widthFraction={0.48}
+            heightFraction={0.45}
+          >
             <CharacterPreviewCanvas anim={anim} />
           </PixelScale>
           <AnimationControls anim={anim} setAnim={setAnim} />

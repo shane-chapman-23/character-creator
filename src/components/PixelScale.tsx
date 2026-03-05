@@ -25,8 +25,15 @@ export default function PixelScale({
       const heightScale = Math.floor(
         (window.innerHeight * heightFraction) / BASE,
       );
+      const isLaptopViewport =
+        window.innerWidth >= 1280 &&
+        window.innerWidth < 1700 &&
+        window.innerHeight >= 850;
+      const effectiveMinScale = isLaptopViewport
+        ? Math.max(minScale, 2)
+        : minScale;
       const nextScale = Math.max(
-        minScale,
+        effectiveMinScale,
         Math.min(maxScale, Math.min(widthScale, heightScale)),
       );
       setScale(nextScale);
