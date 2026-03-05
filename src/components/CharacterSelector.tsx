@@ -29,11 +29,10 @@ export default function CharacterSelector() {
   return (
     <div className="flex flex-col py-2 p-4 bg-surface rounded-xl shadow-card/40 border-3 max-w-90 max-h-[70vh] items-center font-inter">
       <div className="flex gap-2 items-center w-full mb-2">
-        <button
-          className="p-[4px] flex flex-col w-full rounded-lg bg-accent text-text font-inter font-extrabold mx-left  m-2 btn items-center"
-          onClick={randomizeConfig}
-        >
-          RANDOM
+        <button className="btn m-2" onClick={randomizeConfig}>
+          <span className="btn__face p-[4px] bg-accent rounded-lg text-text font-inter font-extrabold">
+            RANDOM
+          </span>
         </button>
       </div>
       <div className="w-full">
