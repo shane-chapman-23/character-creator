@@ -31,7 +31,7 @@ function App() {
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
-        <section className="my-auto max-w-full">
+        <section className="mt-auto max-w-full">
           <CharacterSelector />
           <p className="hidden xl:block mt-6 font-inter text-center">
             Interested in working together? <br />
