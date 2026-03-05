@@ -1,15 +1,52 @@
+import { useEffect, useState } from "react";
+
 type Props = {
   children: React.ReactNode;
-  scale?: number;
+  minScale?: number;
+  maxScale?: number;
+  widthFraction?: number;
+  heightFraction?: number;
 };
 
 const BASE = 256;
 
-export default function PixelScale({ children, scale = 2 }: Props) {
-  const dpr = window.devicePixelRatio || 1;
+export default function PixelScale({
+  children,
+  minScale = 1,
+  maxScale = 5,
+  widthFraction = 0.45,
+  heightFraction = 0.6,
+}: Props) {
+  const [scale, setScale] = useState(minScale);
 
+  useEffect(() => {
+    const updateScale = () => {
+      const widthScale = Math.floor((window.innerWidth * widthFraction) / BASE);
+      const heightScale = Math.floor(
+        (window.innerHeight * heightFraction) / BASE,
+      );
+      const isLaptopViewport =
+        window.innerWidth >= 1280 &&
+        window.innerWidth < 1700 &&
+        window.innerHeight >= 850;
+      const effectiveMinScale = isLaptopViewport
+        ? Math.max(minScale, 2)
+        : minScale;
+      const nextScale = Math.max(
+        effectiveMinScale,
+        Math.min(maxScale, Math.min(widthScale, heightScale)),
+      );
+      setScale(nextScale);
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, [heightFraction, maxScale, minScale, widthFraction]);
+
+  const dpr = window.devicePixelRatio || 1;
   // Snap upward so source pixels map to whole physical pixels without shrinking intent.
-  const snappedScale = Math.max(1, Math.ceil(scale * dpr) / dpr);
+  const snappedScale = Math.max(minScale, Math.ceil(scale * dpr) / dpr);
 
   return (
     <div
