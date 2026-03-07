@@ -12,30 +12,28 @@ const BASE = 256;
 
 export default function PixelScale({
   children,
-  minScale = 1,
+  minScale = 2,
   maxScale = 5,
-  widthFraction = 0.45,
-  heightFraction = 0.6,
+  widthFraction = 0.8, // how much of the screen width the character is allowed to use
+  heightFraction = 0.8, // how much of the screen height the character is allowed to use
 }: Props) {
   const [scale, setScale] = useState(minScale);
 
+  // Calculate the biggest scale the character can be based on the current
+  // screen size (within the allowed width/height fractions) and update whenever
+  // window is resized
   useEffect(() => {
     const updateScale = () => {
       const widthScale = Math.floor((window.innerWidth * widthFraction) / BASE);
       const heightScale = Math.floor(
         (window.innerHeight * heightFraction) / BASE,
       );
-      const isLaptopViewport =
-        window.innerWidth >= 1280 &&
-        window.innerWidth < 1700 &&
-        window.innerHeight >= 850;
-      const effectiveMinScale = isLaptopViewport
-        ? Math.max(minScale, 2)
-        : minScale;
+
       const nextScale = Math.max(
-        effectiveMinScale,
+        minScale,
         Math.min(maxScale, Math.min(widthScale, heightScale)),
       );
+
       setScale(nextScale);
     };
 
@@ -44,26 +42,17 @@ export default function PixelScale({
     return () => window.removeEventListener("resize", updateScale);
   }, [heightFraction, maxScale, minScale, widthFraction]);
 
-  const dpr = window.devicePixelRatio || 1;
-  // Snap upward so source pixels map to whole physical pixels without shrinking intent.
-  const snappedScale = Math.max(minScale, Math.ceil(scale * dpr) / dpr);
+  const size = BASE * scale;
 
   return (
     <div
       style={{
-        width: BASE * snappedScale,
-        height: BASE * snappedScale,
+        width: size,
+        height: size,
         overflow: "hidden",
       }}
     >
-      <div
-        style={{
-          width: BASE * snappedScale,
-          height: BASE * snappedScale,
-        }}
-      >
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
