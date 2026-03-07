@@ -12,7 +12,7 @@ const BASE = 256;
 
 export default function PixelScale({
   children,
-  minScale = 2,
+  minScale = 1,
   maxScale = 5,
   widthFraction = 0.8, // how much of the screen width the character is allowed to use
   heightFraction = 0.8, // how much of the screen height the character is allowed to use
