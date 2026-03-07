@@ -17,26 +17,19 @@ function App() {
         </h1>
       </section>
       {/* Character Creator */}
-      <div className="flex flex-col items-center gap-8 xl:flex-row xl:items-start">
+      <div className=" flex flex-col w-full items-center justify-center gap-8 xl:flex-row xl:items-start">
         {/* Preview */}
         <section className="flex flex-col items-center gap-6">
-          <PixelScale
-            minScale={1}
-            maxScale={5}
-            widthFraction={0.48}
-            heightFraction={0.45}
-          >
+          <PixelScale>
             <CharacterPreviewCanvas anim={anim} />
           </PixelScale>
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         {/* Selector */}
-        <section className="my-auto max-w-full">
+        <section className="my-auto">
           <CharacterSelector />
         </section>
       </div>
-      {/* Footer */}
-      <section className="flex flex-col h-[100px] lg:h-35 xl:hidden"></section>
     </main>
   );
 }
