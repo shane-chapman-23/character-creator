@@ -1,5 +1,3 @@
-type CharacterSection = "body" | "face" | "clothes";
-
 type CharacterSelectorActions = {
   nextPart: (key: "hair" | "eyes" | "mouth") => void;
   prevPart: (key: "hair" | "eyes" | "mouth") => void;
