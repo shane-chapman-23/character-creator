@@ -31,13 +31,13 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
     >
       <div className="flex gap-2">
         <button type="button" className="btn" onClick={onPrev} tabIndex={-1}>
-          <span className="btn-face btn-scale ui-text bg-surface px-2 font-bold">
+          <span className="btn-face btn-scale ui-text bg-surface font-bold">
             {"<"}
           </span>
         </button>
 
         <button type="button" className="btn" onClick={onNext} tabIndex={-1}>
-          <span className="btn-face btn-scale ui-text bg-surface px-2 font-bold">
+          <span className="btn-face btn-scale ui-text bg-surface font-bold">
             {">"}
           </span>
         </button>
