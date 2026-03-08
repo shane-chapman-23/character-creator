@@ -72,7 +72,7 @@ html, body {
 
 .selector {
   width: clamp(20rem, 25vw, 36rem);
-  min-height: clamp(22rem, 27vw, 33rem);
+  min-height: clamp(22rem, 28vw, 33rem);
   padding: clamp(0.75rem, 1vw, 1.25rem);
 
   display: flex;
