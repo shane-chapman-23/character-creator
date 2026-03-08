@@ -71,8 +71,8 @@ html, body {
 }
 
 .selector {
-  width: clamp(20rem, 25vw, 36rem);
-  min-height: clamp(22rem, 28vw, 33rem);
+  width: clamp(18rem, 25vw, 36rem);
+  min-height: clamp(20rem, 28vw, 33rem);
   padding: clamp(0.75rem, 1vw, 1.25rem);
 
   display: flex;
@@ -96,8 +96,8 @@ html, body {
   align-items: center;
   justify-content: center;
 
-  padding: clamp(0.35rem, 0.6vw, 0.6rem) clamp(0.9rem, 1.2vw, 1.3rem);
-  font-size: clamp(1rem, 1.2vw, 1.5rem);
+  padding: clamp(0.2rem, 0.6vw, 0.6rem) clamp(0.9rem, 1.2vw, 1.3rem);
+  font-size: clamp(0.8rem, 1.2vw, 1.5rem);
   font-weight: 800;
   text-transform: uppercase;
 
@@ -163,8 +163,8 @@ html, body {
 }
 
 .btn-scale {
-  font-size: clamp(0.9rem, 1vw, 1.1rem);
-  padding: clamp(0.35rem, 0.6vw, 0.6rem) clamp(0.75rem, 1vw, 1rem);
+  font-size: clamp(0.7rem, 1vw, 1.1rem);
+  padding: clamp(0.2rem, 0.6vw, 0.6rem) clamp(0.75rem, 1vw, 1rem);
 }
 
 
@@ -174,7 +174,7 @@ html, body {
 }
 
 .ui-text {
-  font-size: clamp(0.9rem, 1vw, 1.5rem);
+  font-size: clamp(0.7rem, 1vw, 1.5rem);
 }
 
 .ui-text-lg {
