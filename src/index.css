@@ -86,13 +86,17 @@ html, body {
   font-family: var(--font-inter);
 }
 
+.tab-list {
+  display: flex;
+  border-bottom: var(--ui-button-border) solid var(--color-text);
+}
+
 .tab {
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   padding: clamp(0.35rem, 0.6vw, 0.6rem) clamp(0.9rem, 1.2vw, 1.3rem);
-
   font-size: clamp(1rem, 1.2vw, 1.5rem);
   font-weight: 800;
   text-transform: uppercase;
@@ -100,29 +104,22 @@ html, body {
   border-top: var(--ui-button-border) solid var(--color-text);
   border-left: var(--ui-button-border) solid var(--color-text);
   border-right: var(--ui-button-border) solid var(--color-text);
-
   border-radius: var(--ui-radius-xl) var(--ui-radius-xl) 0 0;
 
   cursor: pointer;
-
-
-}
-
-.tab-list {
-  display: flex;
-  border-bottom: var(--ui-button-border) solid var(--color-text);
+  margin-bottom: calc(-1 * var(--ui-button-border));
 }
 
 .tab-active {
   background: var(--color-surface);
   color: var(--color-text);
-  border-bottom: var(--color-surface);
+  border-bottom: var(--ui-button-border) solid var(--color-surface);
 }
 
 .tab-inactive {
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   color: var(--color-surface);
-  border-bottom: var(--color-text);
+  border-bottom: var(--ui-button-border) solid var(--color-text);
 }
 
 /* real hitbox */
