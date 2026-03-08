@@ -75,6 +75,7 @@ html, body {
   min-height: clamp(20rem, 28vw, 33rem);
   padding: clamp(0.75rem, 1vw, 1.25rem);
 
+
   display: flex;
   flex-direction: column;
 

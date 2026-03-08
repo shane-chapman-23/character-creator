@@ -12,12 +12,12 @@ function App() {
     <main className="bg-bg w-full min-h-screen flex flex-col py-4 px-4">
       {/* Header */}
       <section>
-        <h1 className="text-surface text-2xl md:text-4xl lg:text-6xl text-center -mb-5">
+        <h1 className="text-surface text-4xl absolute lg:left-1/2 lg:-translate-x-1/2 md:text-5xl lg:text-7xl text-center">
           Character Creator
         </h1>
       </section>
       {/* Character Creator */}
-      <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:flex-wrap">
+      <div className="flex flex-1 w-full flex-col items-center justify-center gap-12 md:flex-row md:flex-wrap">
         <section className="flex flex-col items-center gap-6">
           <PixelScale>
             <CharacterPreviewCanvas anim={anim} />
