@@ -3,10 +3,21 @@
 
 * {
   box-sizing: border-box;
+
 }
 
 html, body {
   overflow-x: hidden;
+}
+
+:root {
+  --ui-border: clamp(3px, 0.30vw, 5px);
+  --ui-shadow: clamp(6px, 0.28vw, 12px);
+  --ui-button-border: clamp(3px, 0.25vw, 5px);
+  --ui-button-shadow: clamp(4px, 0.28vw, 6px);
+  --ui-button-shadow-pressed: clamp(2.5px, 0.16vw, 4px);
+  --ui-radius-xl: clamp(14px, 0.9vw, 18px);
+  --ui-radius-button: clamp(12px, 0.8vw, 16px);
 }
 
 @theme {
@@ -26,17 +37,9 @@ html, body {
   --text-body: 16px;
   --text-secondary: 14px;
 
-  --shadow-card:
-    6px 6px 0 rgba(0,0,0,0.9);
-
-  --stroke: 3px;
-  --shadow-brutal: 4px 4px 0 rgba(0,0,0,0.9);
-  --shadow-brutal-pressed: 2px 2px 0 rgba(0,0,0,0.9);
-
-  --radius-button: 14px; 
-
   --font-inter: Inter, sans-serif;
   --font-pixel: "Jersey 25", sans-serif;
+
 
 }
 
@@ -52,7 +55,8 @@ html, body {
       2px -2px 0 var(--color-text), -2px 0px 0 var(--color-text),
       2px 0px 0 var(--color-text), -2px 2px 0 var(--color-text),
       0px 2px 0 var(--color-text), 2px 2px 0 var(--color-text),
-      4px 4px 0 var(--color-text);
+      /* edit below value to change shadow size */
+      3px 3px 0 var(--color-text);
   }
 
   h2 {
@@ -66,11 +70,65 @@ html, body {
   }
 }
 
+.selector {
+  width: clamp(20rem, 25vw, 36rem);
+  min-height: clamp(20.5rem, 27vw, 33rem);
+  padding: clamp(0.75rem, 1vw, 1.25rem);
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-surface);
+  border: var(--ui-border) solid var(--color-text);
+  border-radius: var(--ui-radius-xl);
+  box-shadow: var(--ui-shadow) var(--ui-shadow) 0 rgba(0, 0, 0, 0.4);
+
+  font-family: var(--font-inter);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: clamp(0.35rem, 0.6vw, 0.6rem) clamp(0.9rem, 1.2vw, 1.3rem);
+
+  font-size: clamp(1rem, 1.2vw, 1.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+
+  border-top: var(--ui-button-border) solid var(--color-text);
+  border-left: var(--ui-button-border) solid var(--color-text);
+  border-right: var(--ui-button-border) solid var(--color-text);
+
+  border-radius: var(--ui-radius-xl) var(--ui-radius-xl) 0 0;
+
+  cursor: pointer;
+
+
+}
+
+.tab-list {
+  display: flex;
+  border-bottom: var(--ui-button-border) solid var(--color-text);
+}
+
+.tab-active {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-bottom: var(--color-surface);
+}
+
+.tab-inactive {
+  background: rgba(0,0,0,0.4);
+  color: var(--color-surface);
+  border-bottom: var(--color-text);
+}
+
 /* real hitbox */
 .btn {
   position: relative;
-  display: inline-flex;
-  width: 100%;             
+  display: inline-flex;          
   padding: 0;               
   border: 0;
   background: transparent;
@@ -78,43 +136,59 @@ html, body {
   user-select: none;
 }
 
-/* fixed shadow behind everything */
 .btn::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: var(--radius-button);
-  box-shadow: var(--shadow-brutal);
+  border-radius: var(--ui-radius-button);
+  box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
   transform: translate(-1px, -1px);
   pointer-events: none;
 }
 
-/* moving face (includes border + background + label) */
-.btn__face {
+.btn-face {
   position: relative;
   z-index: 1;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   width: 100%;
-  border-radius: var(--radius-button);
-  border: var(--stroke) solid var(--color-text);
+
+  border-radius: var(--ui-radius-button);
+  border: var(--ui-button-border) solid var(--color-text);
 
   transform: translate(0, 0);
   transition: transform 0.08s ease;
 }
 
-/* press = face moves down over the shadow */
-.btn:active .btn__face {
-  transform: translate(4px, 4px);
+.btn:active .btn-face {
+  transform: translate(var(--ui-button-shadow), var(--ui-button-shadow));
+}
+
+.btn-scale {
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+  padding: clamp(0.35rem, 0.6vw, 0.6rem) clamp(0.75rem, 1vw, 1rem);
+}
+
+
+
+.ui-text-sm {
+  font-size: clamp(0.75rem, 0.8vw, 0.9rem);
+}
+
+.ui-text {
+  font-size: clamp(0.9rem, 1vw, 1.5rem);
+}
+
+.ui-text-lg {
+  font-size: clamp(1rem, 1.2vw, 2rem);
 }
 
 .inset-divider {
-  height: 2px;
+  height: clamp(2px, 0.15vw, 6px);
   width: 100%;
-  margin-top: 8px;
+margin-top: clamp(6px, 0.5vw, 10px);
+margin-bottom: clamp(3px, 0.3vw, 6px);
   background:
     linear-gradient(
       to bottom,

@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useState, type KeyboardEvent } from "react";
 import { useCharacterConfig } from "@/state/useCharacterConfig";
+import {
+  createCharacterSections,
+  CHARACTER_TABS,
+} from "./characterSelectorConfig";
 import CycleSelector from "./CycleSelector";
 
 export default function CharacterSelector() {
@@ -8,64 +12,80 @@ export default function CharacterSelector() {
 
   const [section, setSection] = useState<"body" | "face" | "clothes">("body");
 
-  const sections = {
-    body: [
-      { label: "Skin", type: "colour", key: "skin" },
-      { label: "Hair", type: "part", key: "hair" },
-      { label: "Hair Colour", type: "colour", key: "hair" },
-    ],
-    face: [
-      { label: "Eyes", type: "part", key: "eyes" },
-      { label: "Mouth", type: "part", key: "mouth" },
-    ],
-    clothes: [
-      { label: "Shirt", type: "colour", key: "top" },
-      { label: "Shorts", type: "colour", key: "bottom" },
-    ],
-  } as const;
+  const sections = createCharacterSections({
+    nextPart,
+    prevPart,
+    nextColour,
+    prevColour,
+  });
 
   const controls = sections[section];
 
+  const handleTabKeyDown = (
+    e: KeyboardEvent<HTMLButtonElement>,
+    currentKey: typeof section,
+  ) => {
+    const tabKeys = CHARACTER_TABS.map(([key]) => key);
+    const currentIndex = tabKeys.indexOf(currentKey);
+
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % tabKeys.length;
+      setSection(tabKeys[nextIndex]);
+      document.getElementById(`tab-${tabKeys[nextIndex]}`)?.focus();
+    }
+
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + tabKeys.length) % tabKeys.length;
+      setSection(tabKeys[prevIndex]);
+      document.getElementById(`tab-${tabKeys[prevIndex]}`)?.focus();
+    }
+
+    if (e.key === "Home") {
+      e.preventDefault();
+      setSection(tabKeys[0]);
+      document.getElementById(`tab-${tabKeys[0]}`)?.focus();
+    }
+
+    if (e.key === "End") {
+      e.preventDefault();
+      setSection(tabKeys[tabKeys.length - 1]);
+      document.getElementById(`tab-${tabKeys[tabKeys.length - 1]}`)?.focus();
+    }
+  };
+
   return (
-    <div className="flex flex-col py-2 p-4 bg-surface rounded-xl shadow-card/40 border-3 max-w-90 h-80 items-center font-inter">
-      <div className="flex gap-2 items-center w-full mb-2">
-        <button className="btn m-2" onClick={randomizeConfig}>
-          <span className="btn__face p-[4px] bg-accent rounded-lg text-text font-inter font-extrabold">
-            RANDOM
-          </span>
-        </button>
-      </div>
-      <div className="w-full">
-        {/* Tab bar */}
-        <div className="flex gap border-b-3 border-text px-1">
-          {(
-            [
-              ["body", "BODY"],
-              ["face", "FACE"],
-              ["clothes", "CLOTHES"],
-            ] as const
-          ).map(([key, label]) => {
+    <div className="selector shadow-card/40">
+      <button className="btn mb-4 mx-auto w-full" onClick={randomizeConfig}>
+        <span className="btn-face btn-scale ui-text-lg bg-accent rounded-lg text-text font-inter font-extrabold">
+          RANDOM
+        </span>
+      </button>
+
+      <div className="w-full flex-1">
+        <div
+          role="tablist"
+          aria-label="Character sections"
+          className="tab-list mx-1"
+        >
+          {CHARACTER_TABS.map(([key, label]) => {
             const active = section === key;
+
             return (
               <button
                 key={key}
+                id={`tab-${key}`}
+                role="tab"
                 type="button"
+                aria-selected={active}
+                aria-controls={`panel-${key}`}
+                tabIndex={active ? 0 : -1}
                 onClick={() => setSection(key)}
-                className={[
-                  // base tab shape
-                  "px-4 py-2 font-extrabold uppercase",
-                  "rounded-t-xl",
-                  "border-t-3 border-x-3 border-text",
-                  // remove the "button press" feel for tabs (optional)
-                  "shadow-none",
-                  // make tabs sit on the bottom border
-                  "-mb-[3px]",
-                  "cursor-pointer",
-                  // inactive vs active
-                  active
-                    ? "bg-surface text-text border-b-surface"
-                    : "bg-black/40 text-surface border-b-text  hover:opacity-100",
-                ].join(" ")}
+                onKeyDown={(e) => handleTabKeyDown(e, key)}
+                className={["tab", active ? "tab-active" : "tab-inactive"].join(
+                  " ",
+                )}
               >
                 {label}
               </button>
@@ -73,28 +93,25 @@ export default function CharacterSelector() {
           })}
         </div>
 
-        {/* Content panel (looks connected to active tab) */}
-        <div className="pt-3">
-          <div className="min-h-[100px] max-h-[100px] flex flex-col justify-start mb-4">
-            {controls.map((c) => (
-              <div key={`${c.type}-${c.key}`}>
-                <CycleSelector
-                  label={c.label}
-                  onPrev={() => {
-                    if (c.type === "part") prevPart(c.key);
-                    else prevColour(c.key);
-                  }}
-                  onNext={() => {
-                    if (c.type === "part") nextPart(c.key);
-                    else nextColour(c.key);
-                  }}
-                />
-                <div className="inset-divider" />
-              </div>
-            ))}
-          </div>
+        <div
+          id={`panel-${section}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${section}`}
+          className="pt-3"
+        >
+          {controls.map((c) => (
+            <div key={c.id}>
+              <CycleSelector
+                label={c.label}
+                onPrev={c.onPrev}
+                onNext={c.onNext}
+              />
+              <div className="inset-divider" />
+            </div>
+          ))}
         </div>
       </div>
+
       <p className="block mt-auto font-inter text-center text-black/50 text-sm">
         Interested in working together? <br />
         Email me at{" "}

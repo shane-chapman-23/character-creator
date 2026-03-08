@@ -14,7 +14,7 @@ export default function PixelScale({
   children,
   minScale = 1,
   maxScale = 5,
-  widthFraction = 0.8, // how much of the screen width the character is allowed to use
+  widthFraction = 0.9, // how much of the screen width the character is allowed to use
   heightFraction = 0.8, // how much of the screen height the character is allowed to use
 }: Props) {
   const [scale, setScale] = useState(minScale);
