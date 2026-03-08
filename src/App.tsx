@@ -9,24 +9,23 @@ function App() {
   const [anim, setAnim] = useState<Anim>("idle");
 
   return (
-    <main className="bg-bg w-full min-h-screen flex flex-col items-center py-2 px-4">
+    <main className="bg-bg w-full min-h-screen flex flex-col py-4 px-4">
       {/* Header */}
       <section>
-        <h1 className="text-surface text-5xl md:text-7xl lg:text-9xl -mb-10 text-center">
+        <h1 className="text-surface text-2xl md:text-4xl lg:text-6xl text-center -mb-5">
           Character Creator
         </h1>
       </section>
       {/* Character Creator */}
-      <div className=" flex flex-col w-full items-center justify-center gap-8 xl:flex-row xl:items-start">
-        {/* Preview */}
+      <div className="flex w-full flex-col items-center justify-center gap-8 xl:flex-row ">
         <section className="flex flex-col items-center gap-6">
           <PixelScale>
             <CharacterPreviewCanvas anim={anim} />
           </PixelScale>
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
-        {/* Selector */}
-        <section className="my-auto">
+
+        <section>
           <CharacterSelector />
         </section>
       </div>
