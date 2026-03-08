@@ -112,7 +112,7 @@ export default function CharacterSelector() {
         </div>
       </div>
 
-      <p className="block mt-auto font-inter text-center text-black/50 text-sm">
+      <p className="ui-text block mt-auto font-inter text-center text-black/50 text-sm">
         Interested in working together? <br />
         Email me at{" "}
         <a href="mailto:chapman.shane@proton.me" className="text-blue-700">
