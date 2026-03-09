@@ -17,7 +17,7 @@ function App() {
         </h1>
       </section>
       {/* Character Creator */}
-      <div className="flex flex-1 z-10 w-full flex-col items-center justify-center gap-8 md:flex-row md:flex-wrap lg:gap-16">
+      <div className="flex flex-1 z-10 w-full flex-col items-center justify-center gap-8 sm:flex-row sm:flex-wrap lg:gap-16">
         <section className="flex flex-col items-center gap-6">
           <PixelScale>
             <CharacterPreviewCanvas anim={anim} />
@@ -25,7 +25,7 @@ function App() {
           <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
 
-        <section>
+        <section className="flex justify-center items-center">
           <CharacterSelector />
         </section>
       </div>

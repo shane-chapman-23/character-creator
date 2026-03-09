@@ -56,18 +56,18 @@ export default function CharacterSelector() {
   };
 
   return (
-    <div className="selector shadow-card/40">
+    <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[60vh] min-h-[21.6rem]">
       <button className="btn mb-4 mx-auto w-full" onClick={randomizeConfig}>
         <span className="btn-face btn-scale ui-text-lg bg-accent rounded-lg text-text font-inter font-extrabold">
           RANDOM
         </span>
       </button>
 
-      <div className="w-full flex-1">
+      <div className="w-full shrink-0">
         <div
           role="tablist"
           aria-label="Character sections"
-          className="tab-list mx-1"
+          className="tab-list "
         >
           {CHARACTER_TABS.map(([key, label]) => {
             const active = section === key;
@@ -92,27 +92,28 @@ export default function CharacterSelector() {
             );
           })}
         </div>
-
-        <div
-          id={`panel-${section}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${section}`}
-          className="pt-3"
-        >
-          {controls.map((c) => (
-            <div key={c.id}>
-              <CycleSelector
-                label={c.label}
-                onPrev={c.onPrev}
-                onNext={c.onNext}
-              />
-              <div className="inset-divider" />
-            </div>
-          ))}
-        </div>
       </div>
 
-      <p className="ui-text block mt-auto font-inter text-center text-black/50 text-sm">
+      <div
+        id={`panel-${section}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${section}`}
+        tabIndex={-1}
+        className="pt-2 px-2 flex-1 min-h-0 overflow-y-auto"
+      >
+        {controls.map((c) => (
+          <div key={c.id}>
+            <CycleSelector
+              label={c.label}
+              onPrev={c.onPrev}
+              onNext={c.onNext}
+            />
+            <div className="inset-divider" />
+          </div>
+        ))}
+      </div>
+
+      <p className="ui-text-sm block mt-auto font-inter text-center text-black/50 text-sm bg-surface z-11">
         Interested in working together? <br />
         Email me at{" "}
         <a href="mailto:chapman.shane@proton.me" className="text-blue-700">
