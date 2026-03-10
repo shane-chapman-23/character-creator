@@ -1,4 +1,5 @@
 import { type KeyboardEvent } from "react";
+import Button from "./ui/Button";
 
 type Props = {
   label: string;
@@ -25,22 +26,28 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
     <div
       role="group"
       tabIndex={0}
-      aria-labelledby={labelId}
+      aria-label={`${label}. Use left and right arrow keys to change option`}
       onKeyDown={handleKeyDown}
       className="flex items-center justify-between gap-3 font-inter"
     >
       <div className="flex gap-2">
-        <button type="button" className="btn" onClick={onPrev} tabIndex={-1}>
-          <span className="btn-face btn-scale ui-text bg-surface font-bold">
-            {"<"}
-          </span>
-        </button>
+        <Button
+          onClick={onPrev}
+          tabIndex={-1}
+          ariaLabel={`Previous ${label}`}
+          faceClassName="px-2 bg-surface font-bold"
+        >
+          {"<"}
+        </Button>
 
-        <button type="button" className="btn" onClick={onNext} tabIndex={-1}>
-          <span className="btn-face btn-scale ui-text bg-surface font-bold">
-            {">"}
-          </span>
-        </button>
+        <Button
+          onClick={onNext}
+          tabIndex={-1}
+          ariaLabel={`Next ${label}`}
+          faceClassName="px-2 bg-surface font-bold"
+        >
+          {">"}
+        </Button>
       </div>
 
       <span
