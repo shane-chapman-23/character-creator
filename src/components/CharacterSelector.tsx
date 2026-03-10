@@ -5,6 +5,7 @@ import {
   CHARACTER_TABS,
 } from "./characterSelectorConfig";
 import CycleSelector from "./CycleSelector";
+import Button from "./ui/Button";
 
 export default function CharacterSelector() {
   const { nextPart, prevPart, nextColour, prevColour, randomizeConfig } =
@@ -57,11 +58,13 @@ export default function CharacterSelector() {
 
   return (
     <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[60vh] min-h-[21.6rem]">
-      <button className="btn mb-4 mx-auto w-full" onClick={randomizeConfig}>
-        <span className="btn-face btn-scale ui-text-lg bg-accent rounded-lg text-text font-inter font-extrabold">
-          RANDOM
-        </span>
-      </button>
+      <Button
+        onClick={randomizeConfig}
+        className="mb-4 mx-auto w-full"
+        faceClassName="btn-scale ui-text-lg bg-accent rounded-lg text-text font-inter font-extrabold"
+      >
+        RANDOM
+      </Button>
 
       <div className="w-full shrink-0">
         <div

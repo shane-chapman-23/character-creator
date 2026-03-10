@@ -19,7 +19,7 @@ html, body {
   --color-accent: #ff7e26;
   --color-button: #73ef7a;
 
-  --text-h1: clamp(2.5rem, 7vw, 12rem);
+  --text-h1: clamp(2rem, 6vw, 12rem);
   --text-h2: 32px;
   --text-h3: 24px;
   --text-h4: 18px;
@@ -116,22 +116,19 @@ h1 {
 /* real hitbox */
 .btn {
   position: relative;
-  display: inline-flex;          
-  padding: 0;            
+  display: inline-flex;
+  padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
   user-select: none;
 }
 
-.btn::after {
-  content: "";
+.btn-shadow {
   position: absolute;
-    inset: 0;
-
-  border-radius: var(--ui-radius-button);
+  inset: 0;
+  border-radius: calc(var(--ui-radius-button) + 2px);
   box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
-  transform: translate(-1px, -1px);
   pointer-events: none;
 }
 
@@ -149,6 +146,18 @@ h1 {
   transform: translate(0, 0);
   transition: transform 0.08s ease;
 }
+
+.btn::after {
+  content: "";
+  position: absolute;
+    inset: 0;
+
+  border-radius: var(--ui-radius-button);
+  box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
+  transform: translate(-1px, -1px);
+  pointer-events: none;
+}
+
 
 .btn:active .btn-face {
   transform: translate(var(--ui-button-shadow), var(--ui-button-shadow));
