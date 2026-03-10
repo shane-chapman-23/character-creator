@@ -117,7 +117,7 @@ h1 {
 .btn {
   position: relative;
   display: inline-flex;          
-  padding: 0;               
+  padding: 0;            
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -127,7 +127,8 @@ h1 {
 .btn::after {
   content: "";
   position: absolute;
-  inset: 0;
+    inset: 0;
+
   border-radius: var(--ui-radius-button);
   box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
   transform: translate(-1px, -1px);
@@ -151,6 +152,13 @@ h1 {
 
 .btn:active .btn-face {
   transform: translate(var(--ui-button-shadow), var(--ui-button-shadow));
+}
+
+.btn-locked .btn-face {
+  transform: translate(
+    calc(var(--ui-button-shadow) - 2px),
+    calc(var(--ui-button-shadow) - 2px)
+  );
 }
 
 .btn-scale {

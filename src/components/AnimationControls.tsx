@@ -6,19 +6,16 @@ type Props = {
 };
 
 export default function AnimationControls({ anim, setAnim }: Props) {
-  return (
-    <div className="flex gap-2 p-2 font-inter font-bold">
-      <button className="btn" onClick={() => setAnim("idle")}>
-        <span
-          className={`btn-face px-3 py-1 ${
-            anim === "idle" ? "bg-white text-black" : "bg-black/40 text-white"
-          }`}
-        >
-          Idle
-        </span>
-      </button>
+  const isRunning = anim === "run";
 
-      <button className="btn" onClick={() => setAnim("run")}>
+  return (
+    <div className="flex gap-2 p-3 font-inter font-bold">
+      <button
+        className={`btn ${isRunning ? "btn-locked" : ""}`}
+        onClick={() => setAnim(isRunning ? "idle" : "run")}
+        aria-pressed={isRunning}
+        type="button"
+      >
         <span
           className={`btn-face px-3 py-1 ${
             anim === "run" ? "bg-white text-black" : "bg-black/40 text-white"
