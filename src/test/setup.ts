@@ -1,7 +1,11 @@
 HTMLCanvasElement.prototype.getContext = ((contextId: string) => {
   if (contextId !== "2d") return null;
   return {
+    save: () => {},
+    restore: () => {},
     setTransform: () => {},
+    translate: () => {},
+    scale: () => {},
     imageSmoothingEnabled: false,
     clearRect: () => {},
     drawImage: () => {},

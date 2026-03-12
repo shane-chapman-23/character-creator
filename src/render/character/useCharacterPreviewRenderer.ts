@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { buildCharacterLayers } from "@/render/buildCharacterLayers";
+import { buildCharacterLayers } from "@/render/character/buildCharacterLayers";
 import {
   collectLayerUrls,
   renderLayersToCanvas,
   renderLayersToCanvasWithTransform,
-} from "@/render/canvas/canvasRenderer";
-import { getOrCreateImage, isSettled } from "@/render/canvas/imageCache";
+} from "./canvasRenderer";
+import { getOrCreateImage, isSettled } from "./imageCache";
 import {
   logCanvasLoadState,
   makeRafTracker,
@@ -14,7 +14,7 @@ import {
   warnIfCtxMissing,
   // optional:
   // logTransformDebug,
-} from "@/render/canvas/canvasDiagnostics";
+} from "./canvasDiagnostics";
 import type { Anim } from "@/render/animation/bodyFrames";
 import type { CharacterConfig } from "@/types/character";
 

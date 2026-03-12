@@ -13,9 +13,9 @@ import {
   HAIR,
   HEAD,
   MOUTH,
-} from "@/data/characterAssets";
-import { collectLayerUrls } from "@/render/canvas/canvasRenderer";
-import type { Anim } from "./animation/bodyFrames";
+} from "@/data/character/characterAssets";
+import { collectLayerUrls } from "@/render/character/canvasRenderer";
+import type { Anim } from "../animation/bodyFrames";
 
 // "Warm bubble" preloading.
 //

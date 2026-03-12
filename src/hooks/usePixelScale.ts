@@ -7,6 +7,8 @@ type Options = {
   heightFraction?: number;
 };
 
+// Base pixel size of the character sprite (256px).
+// Scaling multiplies this size to maintain crisp pixel rendering.
 const BASE = 256;
 
 export default function usePixelScale({

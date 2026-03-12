@@ -1,5 +1,5 @@
 import { getOrCreateImage, isLoaded } from "./imageCache";
-import type { RenderLayer } from "@/render/buildCharacterLayers";
+import type { RenderLayer } from "@/render/character/buildCharacterLayers";
 
 // A shared off-screen canvas used to tint masked layers.
 // We draw the mask into here, apply a colour using its alpha,

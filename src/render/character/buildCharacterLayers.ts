@@ -6,14 +6,14 @@ import {
   MOUTH,
   BODY_IDLE,
   BODY_RUN,
-} from "@/data/characterAssets";
+} from "@/data/character/characterAssets";
 import { getBodyFrameIndex, type Anim } from "@/render/animation/bodyFrames";
 import {
   SKIN_COLOURS,
   HAIR_COLOURS,
   TOP_COLOURS,
   BOTTOM_COLOURS,
-} from "@/data/characterPalettes";
+} from "@/data/character/characterPalettes";
 
 // Converts the current character config into a render plan for the canvas.
 // Output is two ordered layer lists (body + head) describing:

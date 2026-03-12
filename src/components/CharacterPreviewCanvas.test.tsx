@@ -43,13 +43,13 @@ vi.mock("@/state/useCharacterConfig", () => ({
 }));
 
 // Keep URL collection deterministic for this test.
-vi.mock("@/render/warmBubble", () => ({
+vi.mock("@/render/character/warmBubble", () => ({
   getAdjacentConfigs: () => [],
   getConfigUrls: () => ["/hair_bg.png", "/hair_outline.png"],
 }));
 
 // Keep first-frame layer collection deterministic for diagnostics.
-vi.mock("@/render/buildCharacterLayers", () => ({
+vi.mock("@/render/character/buildCharacterLayers", () => ({
   buildCharacterLayers: () => ({
     body: [
       {
