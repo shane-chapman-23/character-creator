@@ -74,7 +74,7 @@ body {
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #2b3f7b;
+  --color-bg: #372960;
   --color-surface: #363640;
   --color-surface-2: #242432;
   --color-text: #f7f7f7;

@@ -71,9 +71,9 @@ export const parallaxPalettes: Record<ParallaxThemeName, ParallaxPalette> = {
     ground: "#127b22",
   },
   dark: {
-    city: "#28344f",
-    window: "#ffd86b",
-    ground: "#106524",
+    city: "#211944",
+    window: "#f6bf46",
+    ground: "#07601c",
   },
 };
 
