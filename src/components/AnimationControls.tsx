@@ -10,16 +10,15 @@ export default function AnimationControls({ anim, setAnim }: Props) {
   const isRunning = anim === "run";
 
   return (
-    <div className="flex gap-2 p-3 font-inter font-bold">
-      <Button
-        pressed={isRunning}
-        onClick={() => setAnim(isRunning ? "idle" : "run")}
-        faceClassName={`min-w-[5.5rem] px-3 py-1 font-bold ${
-          isRunning ? "bg-surface text-text" : "bg-[#2f4f6e] text-surface"
-        }`}
-      >
-        {isRunning ? "Stop" : "Run"}
-      </Button>
-    </div>
+    <Button
+      pressed={isRunning}
+      onClick={() => setAnim(isRunning ? "idle" : "run")}
+      className="font-inter"
+      faceClassName={`min-w-[5.5rem] px-3 py-1 font-bold ${
+        isRunning ? "bg-surface text-text" : "bg-text-highlight text-white"
+      }`}
+    >
+      {isRunning ? "Stop" : "Run"}
+    </Button>
   );
 }

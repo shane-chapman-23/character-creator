@@ -21,7 +21,6 @@ export default async function tintParallaxLayer(src: string, colour: string) {
   canvas.height = img.naturalHeight;
 
   const ctx = canvas.getContext("2d");
-
   // If canvas is unavailable (very unlikely), fall back to the original image.
   if (!ctx) return src;
 

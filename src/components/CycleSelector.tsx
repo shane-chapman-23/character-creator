@@ -30,12 +30,12 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
       onKeyDown={handleKeyDown}
       className="flex items-center justify-between gap-3 font-inter"
     >
-      <div className="flex gap-2">
+      <div className="flex gap-2 text-text">
         <Button
           onClick={onPrev}
           tabIndex={-1}
           ariaLabel={`Previous ${label}`}
-          faceClassName="px-2 bg-surface font-bold"
+          faceClassName="px-2 bg-surface-2 font-bold"
         >
           {"<"}
         </Button>
@@ -44,7 +44,7 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
           onClick={onNext}
           tabIndex={-1}
           ariaLabel={`Next ${label}`}
-          faceClassName="px-2 bg-surface font-bold"
+          faceClassName="px-2 bg-surface-2 font-bold"
         >
           {">"}
         </Button>

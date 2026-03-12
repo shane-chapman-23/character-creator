@@ -1,7 +1,7 @@
-import cityBuildings from "@/assets/bg/city_buildings.png";
-import cityWindows from "@/assets/bg/city_windows.png";
-import ground from "@/assets/bg/ground.png";
-import grass from "@/assets/bg/grass.png";
+import cityBuildings from "@/assets/parallax/city_buildings.png";
+import cityWindows from "@/assets/parallax/city_windows.png";
+import ground from "@/assets/parallax/ground.png";
+import grass from "@/assets/parallax/grass.png";
 
 export type VerticalAnchor = "bottomToFloor" | "topToFloor";
 export type TintGroup = "city" | "window" | "ground";
@@ -54,15 +54,33 @@ export const parallaxScene: ParallaxLayer[] = [
     src: ground,
     baseWidth: 1024,
     baseHeight: 700,
-    speed: 1,
+    speed: 1.4,
     anchor: "topToFloor",
     tint: "ground",
     depth: "back",
   },
 ];
 
-export const parallaxPalette = {
-  city: "#64aad8",
-  window: "#90ceed",
-  ground: "#16751b",
-} as const;
+export type ParallaxPalette = Record<TintGroup, string>;
+export type ParallaxThemeName = "light" | "dark";
+
+export const parallaxPalettes: Record<ParallaxThemeName, ParallaxPalette> = {
+  light: {
+    city: "#5f87a8",
+    window: "#c9d4dd",
+    ground: "#127b22",
+  },
+  dark: {
+    city: "#28344f",
+    window: "#ffd86b",
+    ground: "#106524",
+  },
+};
+
+// Backward-compatible default palette for callers that are not
+// theme-aware yet.
+export const parallaxPalette: ParallaxPalette = parallaxPalettes.light;
+
+export function getParallaxPalette(theme: ParallaxThemeName) {
+  return parallaxPalettes[theme];
+}

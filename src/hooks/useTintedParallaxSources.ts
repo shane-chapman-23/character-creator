@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
-import tintBackgroundLayer from "@/render/parallax/tintParallaxLayer";
-import { parallaxPalette, parallaxScene } from "@/data/parallax/parallaxScene";
+import tintParallaxLayer from "@/render/parallax/tintParallaxLayer";
+import {
+  getParallaxPalette,
+  parallaxPalettes,
+  parallaxScene,
+  type ParallaxThemeName,
+} from "@/data/parallax/parallaxScene";
 
 type Layer = (typeof parallaxScene)[number];
 
 // Builds tinted image sources for each parallax layer and returns
 // them as a map keyed by layer id.
-export default function useTintedParallaxSources(layers: Layer[]) {
+export default function useTintedParallaxSources(
+  layers: Layer[],
+  theme: ParallaxThemeName,
+) {
   const [tintedSrcs, setTintedSrcs] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -14,14 +22,15 @@ export default function useTintedParallaxSources(layers: Layer[]) {
     // async tint generation is still in progress.
     let cancelled = false;
 
-    async function build() {
+    async function buildTheme(themeName: ParallaxThemeName) {
+      const palette = getParallaxPalette(themeName);
       // Tint all layer sources in parallel. allSettled lets us keep
       // successful results even if one layer fails to process.
       const results = await Promise.allSettled(
         layers.map(async (layer) => {
-          const tintedSrc = await tintBackgroundLayer(
+          const tintedSrc = await tintParallaxLayer(
             layer.src,
-            parallaxPalette[layer.tint],
+            palette[layer.tint],
           );
 
           return [layer.id, tintedSrc] as const;
@@ -44,9 +53,23 @@ export default function useTintedParallaxSources(layers: Layer[]) {
         return [layer.id, layer.src] as const;
       });
 
+      return Object.fromEntries(entries);
+    }
+
+    async function build() {
+      const activeThemeSrcs = await buildTheme(theme);
+
       if (!cancelled) {
-        setTintedSrcs(Object.fromEntries(entries));
+        setTintedSrcs(activeThemeSrcs);
       }
+
+      // Warm the cache for the remaining themes so future theme switches
+      // can crossfade immediately instead of waiting on canvas work.
+      const remainingThemes = Object.keys(parallaxPalettes).filter(
+        (themeName) => themeName !== theme,
+      ) as ParallaxThemeName[];
+
+      await Promise.allSettled(remainingThemes.map((themeName) => buildTheme(themeName)));
     }
 
     build();
@@ -54,7 +77,7 @@ export default function useTintedParallaxSources(layers: Layer[]) {
     return () => {
       cancelled = true;
     };
-  }, [layers]);
+  }, [layers, theme]);
 
   return tintedSrcs;
 }
