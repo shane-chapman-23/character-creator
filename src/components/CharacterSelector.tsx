@@ -57,11 +57,11 @@ export default function CharacterSelector() {
   };
 
   return (
-    <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[60vh] min-h-[21.6rem]">
+    <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[70vh] min-h-[21.6rem]">
       <Button
         onClick={randomizeConfig}
         className="mb-4 mx-auto w-full"
-        faceClassName="btn-scale ui-text-lg bg-accent rounded-lg text-text font-inter font-extrabold"
+        faceClassName="btn-scale ui-text-lg bg-accent rounded-lg text-black font-inter font-extrabold"
       >
         RANDOM
       </Button>
@@ -116,10 +116,13 @@ export default function CharacterSelector() {
         ))}
       </div>
 
-      <p className="ui-text-sm block mt-auto font-inter text-center text-black/50 text-sm bg-surface z-11">
+      <p className="ui-text-sm block mt-auto font-inter text-center text-text/60 text-sm bg-surface">
         Interested in working together? <br />
         Email me at{" "}
-        <a href="mailto:chapman.shane@proton.me" className="text-blue-700">
+        <a
+          href="mailto:chapman.shane@proton.me"
+          className="text-text-highlight"
+        >
           {" "}
           chapman.shane@proton.me
         </a>

@@ -1,25 +1,41 @@
 @import "tailwindcss";
 
+/* =========================
+   1. RESET / GLOBAL
+   ========================= */
 
 * {
   box-sizing: border-box;
-
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
 }
 
+/* =========================
+   2. DESIGN TOKENS
+   ========================= */
+
 @theme {
+  /* motion */
+  --theme-duration: 300ms;
+  --theme-ease: ease-in-out;
+
+  /* colors */
   --color-bg: #50b8ff;
   --color-bg-2: #256a9a;
   --color-surface: #f4e7e7;
   --color-surface-2: #f1e3e3;
   --color-text: #000000;
+  --color-text-highlight: #1976d2;
   --color-accent: #ff7e26;
   --color-button: #73ef7a;
+  --color-border: #000000;
+  --color-shadow: #000000;
 
-  --text-h1: clamp(2rem, 6vw, 12rem);
+  /* typography */
+  --text-h1: clamp(1.5rem, 3vw, 7rem);
   --text-h2: 32px;
   --text-h3: 24px;
   --text-h4: 18px;
@@ -27,78 +43,115 @@ html, body {
   --text-body: 16px;
   --text-secondary: 14px;
 
+  /* fonts */
   --font-inter: Inter, sans-serif;
   --font-pixel: "Jersey 25", sans-serif;
 
-  --ui-border: clamp(3px, 0.30vw, 5px);
+  /* ui */
+  --ui-border: clamp(3px, 0.3vw, 5px);
   --ui-shadow: clamp(6px, 0.28vw, 12px);
   --ui-button-border: clamp(3px, 0.25vw, 5px);
   --ui-button-shadow: clamp(4px, 0.28vw, 6px);
   --ui-radius-xl: clamp(14px, 0.9vw, 18px);
   --ui-radius-button: clamp(12px, 0.8vw, 16px);
-
-
+  --ui-icon-button-size: clamp(4rem, 10vw, 12rem);
 }
+
+/* =========================
+   3. THEME OVERRIDES
+   ========================= */
+
+:root,
+:root[data-theme="light"] {
+  --color-bg: #5ec1ff;
+  --color-surface: #e8dede;
+  --color-surface-2: #f5eded;
+  --color-text: #111111;
+  --color-text-muted: #4e4e4e;
+  --color-text-highlight: #1976d2;
+  --color-accent: #ff7e26;
+  --color-button: #ffe100;
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #2b3f7b;
+  --color-surface: #363640;
+  --color-surface-2: #242432;
+  --color-text: #f7f7f7;
+  --color-text-muted: #b0b0b0;
+  --color-text-highlight: #007efc;
+  --color-accent: #ff7e26;
+  --color-button: #c6d7d9;
+}
+
+:root.theme-transitioning,
+:root.theme-transitioning * {
+  transition:
+    background-color var(--theme-duration) var(--theme-ease),
+    color var(--theme-duration) var(--theme-ease),
+    border-color var(--theme-duration) var(--theme-ease),
+    box-shadow var(--theme-duration) var(--theme-ease),
+    text-shadow var(--theme-duration) var(--theme-ease);
+}
+
+/* =========================
+   4. BASE ELEMENTS
+   ========================= */
 
 @layer base {
-h1 {
-  font-size: var(--text-h1);
-  line-height: 80%;
-
-
-  font-weight: 900;
-  font-family: var(--font-pixel);
-
-  text-shadow:
-    -0.03em -0.03em 0 var(--color-text),
-     0em    -0.03em 0 var(--color-text),
-     0.03em -0.03em 0 var(--color-text),
-    -0.03em  0em    0 var(--color-text),
-     0.03em  0em    0 var(--color-text),
-    -0.03em  0.03em 0 var(--color-text),
-     0em     0.03em 0 var(--color-text),
-     0.03em  0.03em 0 var(--color-text),
-     0.06em  0.06em 0 var(--color-text);
+  h1 {
+    font-size: var(--text-h1);
+    line-height: 80%;
+    font-weight: 900;
+    font-family: var(--font-pixel);
+    text-shadow:
+      -0.03em -0.03em 0 var(--color-shadow),
+       0em    -0.03em 0 var(--color-shadow),
+       0.03em -0.03em 0 var(--color-shadow),
+      -0.03em  0em    0 var(--color-shadow),
+       0.03em  0em    0 var(--color-shadow),
+      -0.03em  0.03em 0 var(--color-shadow),
+       0em     0.03em 0 var(--color-shadow),
+       0.03em  0.03em 0 var(--color-shadow),
+       0.06em  0.06em 0 var(--color-shadow);
+  }
 }
-}
+
+/* =========================
+   5. COMPONENTS
+   ========================= */
 
 .selector {
   width: min(100%, 32rem);
-
-
   display: flex;
   flex-direction: column;
-
   background-color: var(--color-surface);
-  border: var(--ui-border) solid var(--color-text);
+  border: var(--ui-border) solid #000;
   border-radius: var(--ui-radius-xl);
   box-shadow: var(--ui-shadow) var(--ui-shadow) 0 rgba(0, 0, 0, 0.4);
-
   font-family: var(--font-inter);
 }
 
+/* tabs */
 .tab-list {
   display: flex;
-  border-bottom: var(--ui-button-border) solid var(--color-text);
+  border-bottom: var(--ui-button-border) solid var(--color-border);
 }
 
 .tab {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 0.4rem 1rem;
+  margin-bottom: calc(-0.9 * var(--ui-button-border));
   font-size: clamp(0.9rem, 0.9vw, 1.2rem);
   font-weight: 800;
   text-transform: uppercase;
-
-  border-top: var(--ui-button-border) solid var(--color-text);
-  border-left: var(--ui-button-border) solid var(--color-text);
-  border-right: var(--ui-button-border) solid var(--color-text);
+  border-top: var(--ui-button-border) solid var(--color-border);
+  border-right: var(--ui-button-border) solid var(--color-border);
+  border-left: var(--ui-button-border) solid var(--color-border);
   border-radius: var(--ui-radius-xl) var(--ui-radius-xl) 0 0;
-
   cursor: pointer;
-  margin-bottom: calc(-0.9 * var(--ui-button-border));
 }
 
 .tab-active {
@@ -109,16 +162,17 @@ h1 {
 
 .tab-inactive {
   background: rgba(0, 0, 0, 0.4);
-  color: var(--color-surface);
-  border-bottom: var(--ui-button-border) solid var(--color-text);
+  color: var(--color-text-muted);
+  border-bottom: var(--ui-button-border) solid var(--color-border);
 }
 
-/* real hitbox */
+/* buttons */
 .btn {
   position: relative;
   display: inline-flex;
   padding: 0;
   border: 0;
+  border-radius: var(--ui-radius-button);
   background: transparent;
   cursor: pointer;
   user-select: none;
@@ -127,8 +181,8 @@ h1 {
 .btn-shadow {
   position: absolute;
   inset: 0;
-  border-radius: calc(var(--ui-radius-button) + 2px);
-  box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
+  border-radius: inherit;
+  box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 0 var(--color-border);
   pointer-events: none;
 }
 
@@ -139,25 +193,33 @@ h1 {
   align-items: center;
   justify-content: center;
   width: 100%;
-
-  border-radius: var(--ui-radius-button);
-  border: var(--ui-button-border) solid var(--color-text);
-
+  border: var(--ui-button-border) solid var(--color-border);
+  border-radius: inherit;
   transform: translate(0, 0);
   transition: transform 0.08s ease;
+}
+
+.btn-round,
+.btn-round .btn-shadow,
+.btn-round .btn-face {
+  border-radius: 9999px;
+}
+
+.btn-face-icon {
+  width: var(--ui-icon-button-size);
+  height: var(--ui-icon-button-size);
+  padding: 0;
 }
 
 .btn::after {
   content: "";
   position: absolute;
-    inset: 0;
-
-  border-radius: var(--ui-radius-button);
+  inset: 0;
+  border-radius: inherit;
   box-shadow: var(--ui-button-shadow) var(--ui-button-shadow) 0 rgba(0, 0, 0, 0.9);
   transform: translate(-1px, -1px);
   pointer-events: none;
 }
-
 
 .btn:active .btn-face {
   transform: translate(var(--ui-button-shadow), var(--ui-button-shadow));
@@ -169,6 +231,22 @@ h1 {
     calc(var(--ui-button-shadow) - 2px)
   );
 }
+
+.inset-divider {
+  width: 100%;
+  height: clamp(2px, 0.15vw, 6px);
+  margin-top: clamp(6px, 0.5vw, 10px);
+  margin-bottom: clamp(6px, 0.3vw, 10px);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.18),
+    rgba(255, 255, 255, 0.5)
+  );
+}
+
+/* =========================
+   6. UTILITIES
+   ========================= */
 
 .btn-scale {
   font-size: clamp(0.9rem, 1vw, 1.1rem);
@@ -183,28 +261,20 @@ h1 {
   font-size: clamp(1rem, 1.2vw, 1.35rem);
 }
 
-.inset-divider {
-  height: clamp(2px, 0.15vw, 6px);
-  width: 100%;
-margin-top: clamp(6px, 0.5vw, 10px);
-margin-bottom: clamp(3px, 0.3vw, 6px);
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0,0,0,0.18),
-      rgba(255,255,255,0.5)
-    );
-}
-
 .pixel-art {
   image-rendering: pixelated;
-  image-rendering: crisp-edges; 
+  image-rendering: crisp-edges;
 }
+
+/* =========================
+   7. ANIMATIONS
+   ========================= */
 
 @keyframes scroll {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }

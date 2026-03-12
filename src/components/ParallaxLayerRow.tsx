@@ -8,7 +8,7 @@ type Props = {
   floorY: number;
   tileCount: number;
   tintedSrc?: string;
-  registerLayerTrack: (layerId: string, node: HTMLDivElement | null) => void;
+  registerLayerTrack?: (layerId: string, node: HTMLDivElement | null) => void;
 };
 
 export default function ParallaxLayerRow({
@@ -48,16 +48,21 @@ export default function ParallaxLayerRow({
         }}
         // Register this row's scrolling track with the parallax hook
         // so it can update the horizontal offset each frame.
-        ref={(node) => registerLayerTrack(layer.id, node)}
+        ref={(node) => registerLayerTrack?.(layer.id, node)}
       >
         {Array.from({ length: tileCount }, (_, i) => (
-          <img
+          <div
             key={`${layer.id}-${i}`}
-            src={tintedSrc}
+            className="relative shrink-0"
             style={{ width, height }}
-            className="pixel-art"
-            alt=""
-          />
+          >
+            <img
+              src={tintedSrc}
+              style={{ width, height }}
+              className="pixel-art absolute inset-0"
+              alt=""
+            />
+          </div>
         ))}
       </div>
     </div>

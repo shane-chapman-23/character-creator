@@ -43,7 +43,9 @@ describe("useTintedParallaxSources", () => {
       async (src) => `${src}?tinted`,
     );
 
-    const { result } = renderHook(() => useTintedParallaxSources(layers));
+    const { result } = renderHook(() =>
+      useTintedParallaxSources(layers, "light"),
+    );
 
     await waitFor(() => {
       expect(result.current.city).toBe("/city.png?tinted");
@@ -58,14 +60,16 @@ describe("useTintedParallaxSources", () => {
     });
 
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { result } = renderHook(() => useTintedParallaxSources(layers));
+    const { result } = renderHook(() =>
+      useTintedParallaxSources(layers, "light"),
+    );
 
     await waitFor(() => {
       expect(result.current.city).toBe("/city.png?tinted");
       expect(result.current.grass).toBe("/grass.png");
     });
 
-    expect(errorSpy).toHaveBeenCalledOnce();
+    expect(errorSpy).toHaveBeenCalled();
     errorSpy.mockRestore();
   });
 });

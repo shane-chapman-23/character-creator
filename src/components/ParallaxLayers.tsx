@@ -1,10 +1,17 @@
+import ParallaxLayerRow from "./ParallaxLayerRow";
+import {
+  parallaxScene,
+  type Depth,
+  type ParallaxThemeName,
+} from "@/data/parallax/parallaxScene";
+
 import { useMemo } from "react";
-import { parallaxScene, type Depth } from "@/data/parallax/parallaxScene";
 import useParallaxOffsets from "@/hooks/useParallaxOffsets";
 import useTintedParallaxSources from "@/hooks/useTintedParallaxSources";
 import { useElementWidth } from "@/hooks/useElementWidth";
 import useParallaxTileCounts from "@/hooks/useParallaxTileCounts";
-import ParallaxLayerRow from "./ParallaxLayerRow";
+import useParallaxCrossfade from "@/hooks/useParallaxCrossfade";
+
 import type { Anim } from "@/render/animation/bodyFrames";
 
 type Props = {
@@ -12,11 +19,21 @@ type Props = {
   scale: number;
   floorY: number;
   depth: Depth;
+  theme: ParallaxThemeName;
 };
+
+const PARALLAX_CROSSFADE_DELAY_MS = 100;
+
 // Renders one depth layer of the parallax scene by combining
 // offset animation, tinted sources, measured container width,
 // and repeated tile counts for each layer row.
-export default function ParallaxLayers({ anim, scale, floorY, depth }: Props) {
+export default function ParallaxLayers({
+  anim,
+  scale,
+  floorY,
+  depth,
+  theme,
+}: Props) {
   // Only animate the parallax when the character is running.
   const running = anim === "run";
 
@@ -36,7 +53,13 @@ export default function ParallaxLayers({ anim, scale, floorY, depth }: Props) {
   });
 
   // Generate tinted image sources for the active layers.
-  const tintedSrcs = useTintedParallaxSources(sceneLayers);
+  const nextTintedSrcs = useTintedParallaxSources(sceneLayers, theme);
+
+  const { currentSrcs, previousSrcs, isCrossfading, clearPreviousSrcs } =
+    useParallaxCrossfade({
+      nextTintedSrcs,
+      crossfadeDelayMs: PARALLAX_CROSSFADE_DELAY_MS,
+    });
 
   // Measure the container width so we can calculate how many
   // repeated tiles each layer needs to cover the screen.
@@ -49,6 +72,20 @@ export default function ParallaxLayers({ anim, scale, floorY, depth }: Props) {
     scale,
   );
 
+  function renderRows(srcs: Record<string, string>, tracked: boolean) {
+    return sceneLayers.map((layer) => (
+      <ParallaxLayerRow
+        key={layer.id}
+        layer={layer}
+        scale={scale}
+        floorY={floorY}
+        tileCount={tileCountByLayer[layer.id] ?? 2}
+        tintedSrc={srcs[layer.id]}
+        registerLayerTrack={tracked ? registerLayerTrack : undefined}
+      />
+    ));
+  }
+
   return (
     <div
       ref={rootRef}
@@ -56,17 +93,34 @@ export default function ParallaxLayers({ anim, scale, floorY, depth }: Props) {
         depth === "front" ? "z-20" : "z-0"
       }`}
     >
-      {sceneLayers.map((layer) => (
-        <ParallaxLayerRow
-          key={layer.id}
-          layer={layer}
-          scale={scale}
-          floorY={floorY}
-          tileCount={tileCountByLayer[layer.id] ?? 2}
-          tintedSrc={tintedSrcs[layer.id]}
-          registerLayerTrack={registerLayerTrack}
-        />
-      ))}
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: isCrossfading ? 1 : previousSrcs ? 0 : 1,
+          transition:
+            "opacity var(--theme-duration) var(--theme-ease)",
+        }}
+      >
+        {renderRows(currentSrcs, true)}
+      </div>
+
+      {previousSrcs && (
+        <div
+          className="absolute inset-0"
+          style={{
+            opacity: isCrossfading ? 0 : 1,
+            transition:
+              "opacity var(--theme-duration) var(--theme-ease)",
+          }}
+          onTransitionEnd={() => {
+            if (isCrossfading) {
+              clearPreviousSrcs();
+            }
+          }}
+        >
+          {renderRows(previousSrcs, true)}
+        </div>
+      )}
     </div>
   );
 }

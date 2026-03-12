@@ -27,20 +27,33 @@ export default function useParallaxOffsets({
   // Store per-layer offsets without causing React re-renders every frame.
   const offsetsRef = useRef<Record<string, number>>({});
 
-  // Store each rendered track node so transforms can be updated directly.
-  const tracksRef = useRef<Record<string, HTMLDivElement | null>>({});
+  // Store all rendered track nodes for each layer so duplicate copies
+  // can stay in sync during crossfades.
+  const tracksRef = useRef<Record<string, Set<HTMLDivElement>>>({});
 
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
 
   const registerLayerTrack = useCallback(
     (id: string, node: HTMLDivElement | null) => {
-      tracksRef.current[id] = node;
       if (!node) return;
+
+      const trackSet = tracksRef.current[id] ?? new Set<HTMLDivElement>();
+      trackSet.add(node);
+      tracksRef.current[id] = trackSet;
 
       // Apply the current saved offset when the node mounts/remounts.
       const offset = offsetsRef.current[id] ?? 0;
       node.style.transform = `translateX(${offset}px)`;
+
+      // Clean up if React detaches this specific node later.
+      return () => {
+        const currentSet = tracksRef.current[id];
+        currentSet?.delete(node);
+        if (currentSet && currentSet.size === 0) {
+          delete tracksRef.current[id];
+        }
+      };
     },
     [],
   );
@@ -65,8 +78,13 @@ export default function useParallaxOffsets({
       const normalized = normalizeOffset(current, layerWidth);
       offsetsRef.current[layer.id] = normalized;
 
-      const node = tracksRef.current[layer.id];
-      if (node) node.style.transform = `translateX(${normalized}px)`;
+      const nodes = tracksRef.current[layer.id];
+      if (nodes) {
+        for (const node of nodes) {
+          // eslint-disable-next-line react-hooks/immutability
+          node.style.transform = `translateX(${normalized}px)`;
+        }
+      }
     }
   }, [layers, scale]);
 
@@ -99,8 +117,12 @@ export default function useParallaxOffsets({
 
         // Update the transform directly for smooth animation without
         // forcing a React render on every animation frame.
-        const node = tracksRef.current[layer.id];
-        if (node) node.style.transform = `translateX(${updated}px)`;
+        const nodes = tracksRef.current[layer.id];
+        if (nodes) {
+          for (const node of nodes) {
+            node.style.transform = `translateX(${updated}px)`;
+          }
+        }
       }
 
       frameRef.current = requestAnimationFrame(tick);
