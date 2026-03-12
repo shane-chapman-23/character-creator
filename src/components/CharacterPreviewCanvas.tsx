@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useReducer, useRef } from "react";
 import { useCharacterConfig } from "@/state/useCharacterConfig";
-import { getAdjacentConfigs, getConfigUrls } from "@/render/warmBubble";
+import {
+  getAdjacentConfigs,
+  getConfigUrls,
+} from "@/render/character/warmBubble";
 import {
   getOrCreateImage,
   isSettled,
   preloadImages,
-} from "@/render/canvas/imageCache";
-import { useCharacterPreviewRenderer } from "@/render/canvas/useCharacterPreviewRenderer";
+} from "@/render/character/imageCache";
+import { useCharacterPreviewRenderer } from "@/render/character/useCharacterPreviewRenderer";
 import type { Anim } from "@/render/animation/bodyFrames";
 
 const SPRITE_W = 256;

@@ -1,14 +1,20 @@
 # Pixel Character Creator
 
-Live Demo: https://character-creator-orpin.vercel.app/
+Live demo: https://character-creator-orpin.vercel.app/
 
-A modular pixel-art character creator built with React, TypeScript, Vite, and Tailwind CSS.
-
-The app composes layered sprites on canvas, applies runtime palette tinting, and keeps selections stable with ID-based config persistence, ensuring saved characters remain stable even when asset sets change.
+A React + TypeScript pixel character creator with layered canvas rendering, runtime tinting, reducer-driven config state, and a run-only parallax background system.
 
 ## Preview
 
 ![Character Creator Demo](docs/demo.gif)
+
+## Tech Stack
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS v4
+- Vitest + Testing Library
 
 ## Quick Start
 
@@ -20,116 +26,114 @@ npm run dev
 ## Scripts
 
 - `npm run dev` - start local dev server
-- `npm run build` - type-check and build for production
-- `npm run preview` - preview the production build locally
+- `npm run build` - type-check and production build
+- `npm run preview` - preview production build locally
 - `npm run lint` - run ESLint
 - `npm run test` - run Vitest
 - `npm run test:watch` - run tests in watch mode
 - `npm run test:coverage` - run tests with coverage
 
-## Current Features
+## Features
 
-- Layered sprite rendering (`bg` + `outline`) for body, head, and hair
+- Layered character rendering (`bg` + `outline`) for body/head/hair
 - Single-layer overlays for eyes and mouth
-- Runtime palette swaps using canvas compositing (`source-in`)
-- Selector tabs for body, face, and clothing options
-- Animation mode toggle (`idle` / `run`)
-- Randomize action with precomputed next random config
-- Local persistence (`character_config_v1`) with clamping when assets change
-- Image caching and warm preloading for likely next selections
-- Dev-time diagnostics for invalid/missing/duplicate layered assets
+- Palette tinting via canvas compositing (`source-in`)
+- Idle/run animation toggle
+- Randomize with precomputed next random config
+- Local persistence (`character_config_v1`) with safe clamping if assets change
+- Warm preloading for likely next selector actions
+- Multi-depth parallax scene with runtime tinting and responsive tiling
+- Parallax motion only while animation mode is `run`
 
-## Rendering Pipeline
+## Character Rendering Pipeline
 
-1. `buildCharacterLayers` maps `CharacterConfig` to ordered render groups (`body` and `head`).
-2. `useCharacterPreviewRenderer` runs a requestAnimationFrame loop.
-3. Body frames are selected from `BODY_IDLE` or `BODY_RUN` via `getBodyFrameIndex`.
-4. Layered parts draw as: `bg` mask -> tint fill (`source-in`) -> `outline`.
-5. Assets are loaded through shared cache helpers (`getOrCreateImage`, `preloadImages`).
+1. `buildCharacterLayers` maps current config to ordered `body` and `head` render layers.
+2. `useCharacterPreviewRenderer` drives an animation loop with `requestAnimationFrame`.
+3. Frame selection uses `getBodyFrameIndex` from `src/render/animation/bodyFrames.ts`.
+4. Layered assets draw in this order: mask `bg` -> tint fill -> `outline`.
+5. Shared image cache (`getOrCreateImage`, `preloadImages`) avoids duplicate loads.
 
-Current draw order:
+Draw order:
 
 - Body: legs -> bottom -> top -> arms
 - Head: head -> eyes -> mouth -> hair
 
-Notes:
+Implementation details:
 
-- Body and head are rendered on separate canvases so head bob/tilt transforms do not affect body layers.
-- Run mode uses a smoothed 3-frame pattern (`0-1-2-1`) when applicable.
+- Body and head render on separate canvases so head transforms do not affect body layers.
+- Run animation uses a smoothed 3-frame sequence (`0-1-2-1`) where applicable.
 
-## Preloading Strategy
+## Parallax System
 
-The preview preloads URLs for:
+Parallax is composed from scene data in `src/data/background/parallaxScene.ts` and rendered by:
 
-- current config
-- one-step adjacent configs (prev/next by part and colour)
-- precomputed next random config
+- `src/components/ParallaxLayers.tsx`
+- `src/components/ParallaxLayerRow.tsx`
+- `src/hooks/useParallaxOffsets.ts`
+- `src/hooks/useParallaxTileCounts.ts`
+- `src/hooks/useTintedParallaxSources.ts`
 
-This is built in `src/render/warmBubble.ts` and consumed by `CharacterPreviewCanvas`.
+Behavior:
 
-Important behavior:
+- Layers are split by depth (`back` / `front`).
+- Each layer is tiled to fill viewport width based on current pixel scale.
+- Layer tinting is generated at runtime by `src/render/background/tintBackgroundLayer.ts` and cached by `src + colour`.
+- If tint generation fails for one layer, that layer falls back to its original image source (other layers still render).
+- Vertical anchoring uses `useFloorY` so layers align to the character floor position.
+- Motion is paused unless `anim === "run"`.
 
-- dedupes URLs before preloading
-- preloads both idle and run assets
-- loading overlay clears when required images are settled (loaded or failed)
+## State and Persistence
 
-## Asset Pipeline
-
-Assets are discovered with Vite `import.meta.glob` and converted into stable options at module initialization.
-
-Supported asset types:
-
-1. Layered assets (`head`, `hair`, `body`) as filename pairs:
-   - `*_bg.png`
-   - `*_outline.png`
-2. Single-layer assets (`eyes`, `mouth`) as standalone `.png` files
-
-Layered key examples:
-
-- `hair_3_0_outline.png` + `hair_3_0_bg.png` -> `hair_3_0`
-- `body_idle_arms_1_outline.png` + `body_idle_arms_1_bg.png` -> `body_idle_arms_1`
-
-Only valid pairs are exposed to the app.
-
-## Asset Naming Rules
-
-Layered files must match:
-
-`<category>_<variant>_<frame>_(outline|bg).png`
-
-- `category`: `[a-z0-9]+` (no underscores)
-- `variant`: `[a-z0-9_]+` (underscores allowed)
-- `frame`: `\d+`
-
-Single-layer IDs come from filename without extension:
-
-- `eyes0.png` -> `eyes0`
-- `mouth2.png` -> `mouth2`
-
-## State Model
-
-State is reducer-driven and provided via `CharacterConfigProvider`.
+`CharacterConfigProvider` manages reducer-based state and exposes selector actions via context.
 
 Config shape:
 
-- `parts`: IDs for `hair`, `eyes`, `mouth`
-- `colours`: indexes for `skin`, `hair`, `top`, `bottom`
+- `parts`: `hair`, `eyes`, `mouth` option IDs
+- `colours`: `skin`, `hair`, `top`, `bottom` palette indices
 
-On startup and on config application, values are clamped to currently available options so stale persisted values cannot break rendering.
+Persistence:
+
+- Stored in localStorage key `character_config_v1`
+- Loaded config is clamped against currently available assets/palettes
+- Prevents crashes from stale IDs after asset changes
+
+## Asset Pipeline
+
+Assets are discovered with `import.meta.glob` and normalized into typed options.
+
+Supported types:
+
+1. Layered pairs (`head`, `hair`, `body`):
+   - `*_bg.png`
+   - `*_outline.png`
+2. Single-layer files (`eyes`, `mouth`):
+   - `*.png`
+
+Examples:
+
+- `hair_3_0_outline.png` + `hair_3_0_bg.png` -> `hair_3_0`
+- `body_idle_arms_1_outline.png` + `body_idle_arms_1_bg.png` -> `body_idle_arms_1`
+- `eyes0.png` -> `eyes0`
 
 ## Project Structure
 
-- `src/components` - preview canvas, selectors, animation controls, scale wrapper
-- `src/render` - layer building, animation timing, canvas renderers, image cache, preload logic
-- `src/state` - config types, reducer, provider, selector helpers, available IDs/palettes
-- `src/data` - asset discovery, pair validation, diagnostics, palette data
+- `src/components` - app UI, selector controls, canvas and parallax render components
+- `src/data/background` - parallax scene and background palette data
+- `src/data/character` - asset discovery, pairing, diagnostics, character palettes
+- `src/hooks` - scale, floor alignment, parallax motion/tiling/tint hooks
+- `src/render/character` - layer composition, renderer loop, image cache, warm preload helpers
+- `src/render/background` - background tint generation
+- `src/state` - reducer, provider, selectors, available IDs and palettes
 
 ## Testing
 
-Vitest coverage includes:
+Vitest coverage currently includes:
 
-- layered asset pairing and diagnostics
-- single-layer asset ID mapping
-- reducer and config clamping behavior
-- selector utility behavior
-- canvas renderer and image-cache behavior
+- asset pairing and diagnostics (`src/data/character/*.test.ts`)
+- reducer/config clamping and selector utilities (`src/state/*.test.ts`)
+- canvas renderer and image cache (`src/render/character/*.test.ts`)
+- character preview behavior (`src/components/CharacterPreviewCanvas.test.tsx`)
+- parallax hooks:
+  - `useFloorY` layout reactivity
+  - `useParallaxOffsets` run-only motion
+  - `useTintedParallaxSources` partial-failure fallback

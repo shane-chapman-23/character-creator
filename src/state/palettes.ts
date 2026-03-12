@@ -4,7 +4,7 @@ import {
   HAIR_COLOURS,
   TOP_COLOURS,
   BOTTOM_COLOURS,
-} from "@/data/characterPalettes";
+} from "@/data/character/characterPalettes";
 
 export const PALETTES: Record<CharacterColourPart, readonly string[]> = {
   skin: SKIN_COLOURS,
