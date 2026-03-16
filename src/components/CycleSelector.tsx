@@ -35,7 +35,7 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
           onClick={onPrev}
           tabIndex={-1}
           ariaLabel={`Previous ${label}`}
-          faceClassName="px-2 bg-surface-2 font-bold"
+          faceClassName="px-2 bg-surface font-bold"
         >
           {"<"}
         </Button>
@@ -44,7 +44,7 @@ export default function CycleSelector({ label, onPrev, onNext }: Props) {
           onClick={onNext}
           tabIndex={-1}
           ariaLabel={`Next ${label}`}
-          faceClassName="px-2 bg-surface-2 font-bold"
+          faceClassName="px-2 bg-surface font-bold"
         >
           {">"}
         </Button>
