@@ -22,7 +22,7 @@ type Props = {
   theme: ParallaxThemeName;
 };
 
-const PARALLAX_CROSSFADE_DELAY_MS = 100;
+const PARALLAX_CROSSFADE_DELAY_MS = 20;
 
 // Renders one depth layer of the parallax scene by combining
 // offset animation, tinted sources, measured container width,
@@ -97,8 +97,7 @@ export default function ParallaxLayers({
         className="absolute inset-0"
         style={{
           opacity: isCrossfading ? 1 : previousSrcs ? 0 : 1,
-          transition:
-            "opacity var(--theme-duration) var(--theme-ease)",
+          transition: "opacity var(--theme-duration) var(--theme-ease)",
         }}
       >
         {renderRows(currentSrcs, true)}
@@ -109,8 +108,7 @@ export default function ParallaxLayers({
           className="absolute inset-0"
           style={{
             opacity: isCrossfading ? 0 : 1,
-            transition:
-              "opacity var(--theme-duration) var(--theme-ease)",
+            transition: "opacity var(--theme-duration) var(--theme-ease)",
           }}
           onTransitionEnd={() => {
             if (isCrossfading) {

@@ -44,7 +44,7 @@ export const parallaxScene: ParallaxLayer[] = [
     src: grass,
     baseWidth: 1024,
     baseHeight: 5,
-    speed: 1.4,
+    speed: 1.5,
     anchor: "bottomToFloor",
     tint: "ground",
     depth: "front",
@@ -54,7 +54,7 @@ export const parallaxScene: ParallaxLayer[] = [
     src: ground,
     baseWidth: 1024,
     baseHeight: 700,
-    speed: 1.4,
+    speed: 1.5,
     anchor: "topToFloor",
     tint: "ground",
     depth: "back",
@@ -68,12 +68,12 @@ export const parallaxPalettes: Record<ParallaxThemeName, ParallaxPalette> = {
   light: {
     city: "#5f87a8",
     window: "#c9d4dd",
-    ground: "#127b22",
+    ground: "#04724D",
   },
   dark: {
-    city: "#1b143a",
-    window: "#f6bf46",
-    ground: "#07601c",
+    city: "#1f1c2b",
+    window: "#E1BC29",
+    ground: "#034732",
   },
 };
 
