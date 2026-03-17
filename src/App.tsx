@@ -56,7 +56,7 @@ function App() {
   return (
     <main
       ref={mainRef}
-      className="relative bg-bg w-full min-h-screen flex flex-col py-4 px-4 overflow-hidden"
+      className="relative bg-bg w-full min-h-screen flex flex-col py-4 px-4"
     >
       <ParallaxLayers
         depth={"back"}
@@ -65,6 +65,7 @@ function App() {
         floorY={floorY}
         theme={theme}
       />
+      {/* <h1 className="text-center text-white">Character Creator</h1> */}
 
       {/* Theme switch button */}
       <section className="flex gap-4 items-center absolute z-11 lg:m-6 text-center ">
@@ -84,7 +85,6 @@ function App() {
               <CharacterPreviewCanvas anim={anim} />
             </PixelScale>
           </div>
-          <AnimationControls anim={anim} setAnim={setAnim} />
         </section>
         <ParallaxLayers
           depth={"front"}
@@ -95,7 +95,7 @@ function App() {
         />
 
         <section className="flex z-30 flex-col gap-2 justify-center items-center">
-          <CharacterSelector />
+          <CharacterSelector anim={anim} setAnim={setAnim} />
         </section>
       </div>
     </main>
