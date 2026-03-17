@@ -42,7 +42,7 @@ export const parallaxScene: ParallaxLayer[] = [
   {
     id: "grass",
     src: grass,
-    baseWidth: 1024,
+    baseWidth: 128,
     baseHeight: 5,
     speed: 1.5,
     anchor: "bottomToFloor",
