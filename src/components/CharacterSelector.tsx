@@ -8,8 +8,6 @@ import CycleSelector from "./CycleSelector";
 import Button from "./ui/Button";
 import AnimationControls from "./AnimationControls";
 
-import DiceIcon from "@/assets/icons/dice.svg";
-
 import type { Anim } from "@/render/animation/bodyFrames";
 
 type Props = {
