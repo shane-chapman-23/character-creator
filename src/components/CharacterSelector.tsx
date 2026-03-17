@@ -6,8 +6,18 @@ import {
 } from "./characterSelectorConfig";
 import CycleSelector from "./CycleSelector";
 import Button from "./ui/Button";
+import AnimationControls from "./AnimationControls";
 
-export default function CharacterSelector() {
+import DiceIcon from "@/assets/icons/dice.svg";
+
+import type { Anim } from "@/render/animation/bodyFrames";
+
+type Props = {
+  anim: Anim;
+  setAnim: (a: Anim) => void;
+};
+
+export default function CharacterSelector({ anim, setAnim }: Props) {
   const { nextPart, prevPart, nextColour, prevColour, randomizeConfig } =
     useCharacterConfig();
 
@@ -57,15 +67,7 @@ export default function CharacterSelector() {
   };
 
   return (
-    <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[70vh] min-h-[21.6rem]">
-      <Button
-        onClick={randomizeConfig}
-        className="mb-4 mx-auto w-full"
-        faceClassName="btn-scale ui-text-lg bg-accent rounded-lg text-black font-inter font-extrabold"
-      >
-        RANDOM
-      </Button>
-
+    <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[75vh] min-h-[22rem] xl:min-h-[27rem]">
       <div className="w-full shrink-0">
         <div
           role="tablist"
@@ -102,7 +104,7 @@ export default function CharacterSelector() {
         role="tabpanel"
         aria-labelledby={`tab-${section}`}
         tabIndex={-1}
-        className="pt-2 px-2 flex-1 min-h-0 overflow-y-auto"
+        className="pt-2 px-2 flex-1 "
       >
         {controls.map((c) => (
           <div key={c.id}>
@@ -115,8 +117,17 @@ export default function CharacterSelector() {
           </div>
         ))}
       </div>
-
-      <p className="ui-text-sm block mt-auto font-inter text-center text-text/60 text-sm bg-surface">
+      <div className="flex mx-auto gap-3 mt-2">
+        <Button
+          onClick={randomizeConfig}
+          className="mx-auto"
+          faceClassName="btn-scale ui-text-sm bg-purple-700 text-white font-inter font-extrabold"
+        >
+          Random
+        </Button>
+        <AnimationControls anim={anim} setAnim={setAnim} />
+      </div>
+      <p className="ui-text-sm block mt-4 font-inter text-center text-text/60 text-sm bg-surface">
         Interested in working together? <br />
         Email me at{" "}
         <a

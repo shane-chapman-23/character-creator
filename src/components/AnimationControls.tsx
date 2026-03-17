@@ -14,8 +14,8 @@ export default function AnimationControls({ anim, setAnim }: Props) {
       pressed={isRunning}
       onClick={() => setAnim(isRunning ? "idle" : "run")}
       className="font-inter"
-      faceClassName={`min-w-[5.5rem] px-3 py-1 font-bold ${
-        isRunning ? "bg-surface text-text" : "bg-bg text-text"
+      faceClassName={`min-w-[6rem] py-1 font-bold ${
+        isRunning ? "bg-red-700 text-white" : "bg-green-600 text-white"
       }`}
     >
       {isRunning ? "Stop" : "Run"}
