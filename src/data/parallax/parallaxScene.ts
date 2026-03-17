@@ -16,6 +16,7 @@ export type ParallaxLayer = {
   anchor: VerticalAnchor;
   tint: TintGroup;
   depth: Depth;
+  yOffset?: number;
 };
 
 export const parallaxScene: ParallaxLayer[] = [
@@ -48,6 +49,7 @@ export const parallaxScene: ParallaxLayer[] = [
     anchor: "bottomToFloor",
     tint: "ground",
     depth: "front",
+    yOffset: 1,
   },
   {
     id: "ground",

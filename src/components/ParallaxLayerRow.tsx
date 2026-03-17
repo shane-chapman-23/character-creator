@@ -22,15 +22,18 @@ export default function ParallaxLayerRow({
   // If the tinted image hasn't finished generating yet, skip rendering.
   if (!tintedSrc) return null;
 
-  const width = layer.baseWidth * scale;
-  const height = layer.baseHeight * scale;
+  const width = Math.round(layer.baseWidth * scale);
+  const height = Math.round(layer.baseHeight * scale);
 
-  // Position the layer relative to the floor line so different
-  // layer types can align either above or directly on the floor.
+  // Position the layer relative to the floor line. Layers can anchor
+  // either on the floor or extend upward from it. An optional yOffset
+  // allows small visual tweaks for pixel-perfect alignment.
+  const yOffset = layer.yOffset ?? 0;
+
   const verticalStyle =
     layer.anchor === "bottomToFloor"
-      ? { top: floorY - height }
-      : { top: floorY };
+      ? { top: Math.round(floorY - height + yOffset) }
+      : { top: Math.round(floorY + yOffset) };
 
   return (
     <div
@@ -56,11 +59,15 @@ export default function ParallaxLayerRow({
             className="relative shrink-0"
             style={{ width, height }}
           >
-            <img
-              src={tintedSrc}
-              style={{ width, height }}
+            <div
               className="pixel-art absolute inset-0"
-              alt=""
+              style={{
+                width,
+                height,
+                backgroundImage: `url(${tintedSrc})`,
+                backgroundSize: `${width}px ${height}px`,
+                backgroundRepeat: "no-repeat",
+              }}
             />
           </div>
         ))}
