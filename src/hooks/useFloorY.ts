@@ -5,10 +5,7 @@ type Options = {
   targetRef: RefObject<HTMLElement | null>;
 };
 
-export default function useFloorY({
-  containerRef,
-  targetRef,
-}: Options) {
+export default function useFloorY({ containerRef, targetRef }: Options) {
   const [floorY, setFloorY] = useState(0);
 
   useLayoutEffect(() => {
