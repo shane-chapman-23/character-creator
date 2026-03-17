@@ -29,6 +29,7 @@ export const parallaxScene: ParallaxLayer[] = [
     anchor: "bottomToFloor",
     tint: "city",
     depth: "back",
+    yOffset: 1,
   },
   {
     id: "windows",
@@ -39,6 +40,7 @@ export const parallaxScene: ParallaxLayer[] = [
     anchor: "bottomToFloor",
     tint: "window",
     depth: "back",
+    yOffset: 1,
   },
   {
     id: "grass",
