@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import CharacterPreviewCanvas from "./components/CharacterPreviewCanvas";
 import CharacterSelector from "./components/CharacterSelector";
 import PixelScale from "./components/PixelScale";
-import AnimationControls from "./components/AnimationControls";
 import type { Anim } from "@/render/animation/bodyFrames";
 import ParallaxLayers from "./components/ParallaxLayers";
 import Button from "./components/ui/Button";
