@@ -66,6 +66,16 @@ export default function CharacterSelector({ anim, setAnim }: Props) {
 
   return (
     <div className="selector shadow-card/40 p-[1rem] md:h-[21rem] lg:h-[23rem] xl:h-[25rem] 2xl:h-[32rem] 2xl:p-[1.5rem] max-h-[75vh] min-h-[22rem] xl:min-h-[27rem]">
+      <div className="flex gap-3 mb-6 w-full">
+        <Button
+          onClick={randomizeConfig}
+          className="mx-auto w-full"
+          faceClassName="btn-scale ui-text-sm bg-purple-600 text-white font-inter font-extrabold"
+        >
+          Random
+        </Button>
+        <AnimationControls anim={anim} setAnim={setAnim} />
+      </div>
       <div className="w-full shrink-0">
         <div
           role="tablist"
@@ -115,16 +125,7 @@ export default function CharacterSelector({ anim, setAnim }: Props) {
           </div>
         ))}
       </div>
-      <div className="flex mx-auto gap-3 mt-2">
-        <Button
-          onClick={randomizeConfig}
-          className="mx-auto"
-          faceClassName="btn-scale ui-text-sm bg-purple-700 text-white font-inter font-extrabold"
-        >
-          Random
-        </Button>
-        <AnimationControls anim={anim} setAnim={setAnim} />
-      </div>
+
       <p className="ui-text-sm block mt-4 font-inter text-center text-text/60 text-sm bg-surface">
         Interested in working together? <br />
         Email me at{" "}
